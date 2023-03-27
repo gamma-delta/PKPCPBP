@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugin/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/functionalTest/java/pkpcpbp/PKPCPBPPluginFunctionalTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/functionalTest/java/pkpcpbp/PKPCPBPPluginFunctionalTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/test/java/pkpcpbp/PKPCPBPPluginTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/pkpcpbp/PKPCPBPPluginTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="1936" />
+    <option name="totalTimeSeconds" value="2660" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -55,6 +56,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/plugin/src/main/java/at/petrak" />
     </key>
   </component>

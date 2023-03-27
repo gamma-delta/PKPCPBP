@@ -1,6 +1,7 @@
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id 'java-gradle-plugin'
+    id 'maven-publish'
 }
 
 group = 'at.petrak.pkpcpbp'
@@ -24,6 +25,23 @@ gradlePlugin {
             displayName = 'P.K.P.C.P.B.P'
             description = "Petra Kat's Pretty Cool Publishing Boilerplate Plugin"
             implementationClass = 'at.petrak.pkpcpbp.PKPCPBPPlugin'
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId project.group
+            artifactId project.archivesBaseName
+            version project.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url "file://" + System.getenv("local_maven")
         }
     }
 }
