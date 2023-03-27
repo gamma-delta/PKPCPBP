@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'at.petrak.pkpcpbp'
-version = '0.1.0'
+version = properties["pluginVersion"] + "-pre-" + System.getenv("BUILD_NUMBER")
 
 repositories {
     // Use Maven Central for resolving dependencies.
