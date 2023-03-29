@@ -3,17 +3,57 @@
  */
 package at.petrak.pkpcpbp;
 
+import com.diluv.schoomp.Webhook;
+import com.diluv.schoomp.message.Message;
 import org.gradle.api.Project;
 import org.gradle.api.Plugin;
+import org.gradle.api.Task;
 
 /**
  * A simple 'hello world' plugin.
  */
 public class PKPCPBPPlugin implements Plugin<Project> {
+    private Project project = null;
+
+    private boolean isRelease = false;
+    private String changelog = "";
+    private String version = "";
+
     public void apply(Project project) {
-        // Register a task
-        project.getTasks().register("greeting", task -> {
-            task.doLast(s -> System.out.println("Hello from plugin 'pkpcpbp.greeting'"));
-        });
+        this.project = project;
+
+        this.changelog = MiscUtil.getGitChangelog(project);
+        this.isRelease = MiscUtil.isRelease(this.changelog);
+        this.version = MiscUtil.getVersion(project);
+    }
+
+    private void pushWebhook(Task task) {
+        try {
+            String discordWebhook = System.getenv("discordWebhook");
+            String buildUrl = System.getenv("BUILD_URL");
+            if (discordWebhook == null || buildUrl == null) {
+                task.getLogger().warn("Cannot send the webhook without the webhook url or the build url");
+                return;
+            }
+            var webhook = new Webhook(discordWebhook, "Petrak@ Patreon Gradle");
+
+            var message = new Message();
+            message.setUsername("Patreon Early Access");
+            message.setContent("""
+                New **%s** prerelease -- build #%s for %s!
+                Download it here: %s
+                Changelog: ```
+                %s
+                ```"""
+                .formatted(this.project.property("modName"),
+                    System.getenv("BUILD_NUMBER"),
+                    this.project.property("minecraftVersion"),
+                    buildUrl,
+                    this.changelog));
+
+            webhook.sendMessage(message);
+        } catch (Exception exn) {
+            task.getLogger().error("Failed to push Discord webhook.", exn);
+        }
     }
 }

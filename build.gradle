@@ -15,6 +15,9 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+
+    implementation("blue.endless:jankson:1.2.2")
+    implementation group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.2.6'
 }
 
 gradlePlugin {
@@ -22,7 +25,7 @@ gradlePlugin {
     plugins {
         greeting {
             id = 'at.petrak.pkpcpbp'
-            displayName = 'P.K.P.C.P.B.P'
+            displayName = 'P.K.P.C.P.B.P.'
             description = "Petra Kat's Pretty Cool Publishing Boilerplate Plugin"
             implementationClass = 'at.petrak.pkpcpbp.PKPCPBPPlugin'
         }
