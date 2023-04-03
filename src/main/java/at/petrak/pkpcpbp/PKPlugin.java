@@ -3,10 +3,11 @@
  */
 package at.petrak.pkpcpbp;
 
+import at.petrak.pkpcpbp.cfg.PKExtension;
 import com.diluv.schoomp.Webhook;
 import com.diluv.schoomp.message.Message;
-import org.gradle.api.Project;
 import org.gradle.api.Plugin;
+import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 public abstract class PKPlugin implements Plugin<Project> {
@@ -16,14 +17,18 @@ public abstract class PKPlugin implements Plugin<Project> {
     private String changelog = "";
     private String version = "";
 
+    private PKExtension cfg;
+
     public void apply(Project project) {
+        this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
+
         this.project = project;
 
         this.changelog = MiscUtil.getGitChangelog(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
-        this.version = MiscUtil.getVersion(project);
+        this.version = MiscUtil.getVersion(project, this.cfg.getModInfo());
 
-        this.project.task("publishToDiscord" , t -> t.doLast(this::pushWebhook));
+        this.project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
     }
 
     private void pushWebhook(Task task) {
