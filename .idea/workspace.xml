@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/MiscUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/filters/FlatteningJson5Transmogrifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/filters/Json5Transmogrifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/filters/JsonUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModInfoExtension.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/MiscUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/MiscUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPCPBPPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="3921" />
+    <option name="totalTimeSeconds" value="10280" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -45,27 +46,35 @@
       </list>
     </option>
   </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="ProjectId" id="2NSwCIKmdh6t0PwC4uBTo8uIRbv" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "settings.editor.selected.configurable": "actions.on.save"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/plugin/src/main/java/at/petrak" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="at.petrak.pkpcpbp" />
       <recent name="at.petrak.pkpcpbp.filters" />
     </key>
   </component>

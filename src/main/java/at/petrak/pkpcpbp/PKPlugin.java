@@ -9,10 +9,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Task;
 
-/**
- * A simple 'hello world' plugin.
- */
-public class PKPCPBPPlugin implements Plugin<Project> {
+public abstract class PKPlugin implements Plugin<Project> {
     private Project project = null;
 
     private boolean isRelease = false;
@@ -25,6 +22,8 @@ public class PKPCPBPPlugin implements Plugin<Project> {
         this.changelog = MiscUtil.getGitChangelog(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
         this.version = MiscUtil.getVersion(project);
+
+        this.project.task("publishToDiscord" , t -> t.doLast(this::pushWebhook));
     }
 
     private void pushWebhook(Task task) {

@@ -1,14 +1,15 @@
 package at.petrak.pkpcpbp;
 
+import at.petrak.pkpcpbp.cfg.ModInfoExtension;
 import org.gradle.api.Project;
 
 import java.io.ByteArrayOutputStream;
 
 public class MiscUtil {
-    public static String getVersion(Project project) {
+    public static String getVersion(Project project, ModInfoExtension info) {
         var changelog = getGitChangelog(project);
 
-        String version = project.property("modVersion").toString();
+        String version = info.getModVersion();
         if (!isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
             version += "-pre-" + System.getenv("BUILD_NUMBER");
         } else if (System.getenv("TAG_NAME") != null) {
