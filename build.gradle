@@ -22,11 +22,17 @@ dependencies {
 gradlePlugin {
     // Define the plugin
     plugins {
-        greeting {
-            id = 'at.petrak.pkpcpbp'
+        pkpcpbp {
+            id = 'at.petrak.PKPlugin'
             displayName = 'P.K.P.C.P.B.P.'
             description = "Petra Kat's Pretty Cool Publishing Boilerplate Plugin"
-            implementationClass = 'at.petrak.pkpcpbp.PKPCPBPPlugin'
+            implementationClass = 'at.petrak.pkpcpbp.PKPlugin'
+        }
+        pkpcpbpSubproj {
+            id = 'at.petrak.PKSubprojPlugin'
+            displayName = 'PKPCPBP (Subprojs)'
+            description = "Subprojects PKPCPBP"
+            implementationClass = 'at.petrak.pkpcpbp.PKSubprojPlugin'
         }
     }
 }
