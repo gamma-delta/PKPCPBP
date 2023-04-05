@@ -6,15 +6,27 @@ public class ModInfoExtension {
     private String mcVersion;
     private String modVersion;
 
-    public String getMcVersion() {
-        return mcVersion;
-    }
-
     public String getModID() {
         return modID;
     }
 
+    public void modID(String modID) {
+        this.modID = modID;
+    }
+
+    public String getMcVersion() {
+        return mcVersion;
+    }
+
+    public void mcVersion(String mcVersion) {
+        this.mcVersion = mcVersion;
+    }
+
     public String getModVersion() {
         return modVersion;
+    }
+
+    public void modVersion(String modVersion) {
+        this.modVersion = modVersion;
     }
 }
