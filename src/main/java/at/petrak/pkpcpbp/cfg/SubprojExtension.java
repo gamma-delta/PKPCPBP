@@ -22,4 +22,12 @@ public class SubprojExtension {
     public void platform(String platform) {
         this.platform = platform;
     }
+
+    @Override
+    public String toString() {
+        return "SubprojExtension{" +
+            "modInfo=" + modInfo +
+            ", platform='" + platform + '\'' +
+            '}';
+    }
 }

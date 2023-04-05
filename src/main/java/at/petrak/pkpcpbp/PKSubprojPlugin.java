@@ -29,6 +29,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
+        project.getLogger().warn(this.cfg.toString());
 
         project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
         project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
