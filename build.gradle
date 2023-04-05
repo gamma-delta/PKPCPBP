@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group = 'at.petrak.pkpcpbp'
+group = 'at.petra-k.pkpcpbp'
 version = properties["pluginVersion"] + "-pre-" + System.getenv("BUILD_NUMBER")
 
 repositories {
@@ -23,13 +23,13 @@ gradlePlugin {
     // Define the plugin
     plugins {
         pkpcpbp {
-            id = 'at.petrak.PKPlugin'
+            id = 'at.petra-k.PKPlugin'
             displayName = 'P.K.P.C.P.B.P.'
             description = "Petra Kat's Pretty Cool Publishing Boilerplate Plugin"
             implementationClass = 'at.petrak.pkpcpbp.PKPlugin'
         }
         pkpcpbpSubproj {
-            id = 'at.petrak.PKSubprojPlugin'
+            id = 'at.petra-k.PKSubprojPlugin'
             displayName = 'PKPCPBP (Subprojs)'
             description = "Subprojects PKPCPBP"
             implementationClass = 'at.petrak.pkpcpbp.PKSubprojPlugin'

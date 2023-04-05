@@ -31,6 +31,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
 
         project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
+        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
         project.setProperty("archivesBaseName",
             "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
 

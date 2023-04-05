@@ -25,7 +25,7 @@ public abstract class PKPlugin implements Plugin<Project> {
 
         this.changelog = MiscUtil.getGitChangelog(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
-        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
+//        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
         this.project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
     }
