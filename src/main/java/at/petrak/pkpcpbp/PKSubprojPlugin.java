@@ -15,9 +15,10 @@ import org.gradle.jvm.tasks.Jar;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 // https://github.com/jaredlll08/Controlling/blob/10c04497a6bc182ba2788f84ffbbac21da8390bc/buildSrc/src/main/kotlin/com/blamejared/controlling/gradle/DefaultPlugin.kt#L71
@@ -87,8 +88,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 "Implementation-Title", project.getName(),
                 "Implementation-Version", jar.getArchiveVersion().get(),
                 "Implementation-Vendor", "petra-kat",
-                "Implementation-Timestamp",
-                /* format-fu */ DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date().toInstant()),
+                "Implementation-Timestamp", LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
                 "Timestampe", System.currentTimeMillis(),
                 "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"),
                 "Build-On-Minecraft", cfg.getModInfo().getMcVersion()
