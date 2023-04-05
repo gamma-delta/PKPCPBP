@@ -29,12 +29,15 @@ public class PKSubprojPlugin implements Plugin<Project> {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
 
         project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
-        project.setVersion(MiscUtil.getVersion(project, cfg.getModInfo()));
+        String version = MiscUtil.getVersion(project, cfg.getModInfo());
+        project.setVersion(version);
+        project.setProperty("archiveVersion", version);
         project.setProperty("archivesBaseName",
             "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
 
         this.configJava(project);
         this.configDependencies(project);
+        this.configMaven(project);
 
         // Disables Gradle's custom module metadata from being published to maven. The
         // metadata includes mapped dependencies which are not reasonably consumable by
