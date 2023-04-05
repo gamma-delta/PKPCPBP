@@ -28,40 +28,36 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        project.apply(whatTheHellIsAnObjectConfigAction -> {
-            this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
+        this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
 
-            project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
-            // String version = MiscUtil.getVersion(project, cfg.getModInfo());
-            project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
-            project.setProperty("archivesBaseName",
-                "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
+        project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
+        project.setProperty("archivesBaseName",
+            "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
 
-            this.configJava(project);
-            this.configDependencies(project);
-            this.configMaven(project);
+        this.configJava(project);
+        this.configDependencies(project);
+        this.configMaven(project);
 
-            // Disables Gradle's custom module metadata from being published to maven. The
-            // metadata includes mapped dependencies which are not reasonably consumable by
-            // other mod developers.
-            project.getTasks().withType(GenerateModuleMetadata.class).configureEach(it -> {
-                it.setEnabled(false);
+        // Disables Gradle's custom module metadata from being published to maven. The
+        // metadata includes mapped dependencies which are not reasonably consumable by
+        // other mod developers.
+        project.getTasks().withType(GenerateModuleMetadata.class).configureEach(it -> {
+            it.setEnabled(false);
+        });
+
+        project.getTasks().withType(ProcessResources.class).configureEach(it -> {
+            // always make it redo
+            it.getOutputs().upToDateWhen($ -> false);
+            it.exclude(".cache");
+
+            it.filesMatching(List.of("assets/**/*.flatten.json5", "data/**/*.flatten.json5"), file -> {
+                file.setPath(file.getPath().replace(".flatten.json5", ".json"));
+                file.filter(FlatteningJson5Transmogrifier.class);
             });
 
-            project.getTasks().withType(ProcessResources.class).configureEach(it -> {
-                // always make it redo
-                it.getOutputs().upToDateWhen($ -> false);
-                it.exclude(".cache");
-
-                it.filesMatching(List.of("assets/**/*.flatten.json5", "data/**/*.flatten.json5"), file -> {
-                    file.setPath(file.getPath().replace(".flatten.json5", ".json"));
-                    file.filter(FlatteningJson5Transmogrifier.class);
-                });
-
-                it.filesMatching(List.of("assets/**/*.json5", "data/**/*.json5"), file -> {
-                    file.setPath(file.getPath().replace(".json5", ".json"));
-                    file.filter(Json5Transmogrifier.class);
-                });
+            it.filesMatching(List.of("assets/**/*.json5", "data/**/*.json5"), file -> {
+                file.setPath(file.getPath().replace(".json5", ".json"));
+                file.filter(Json5Transmogrifier.class);
             });
         });
     }

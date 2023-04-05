@@ -15,22 +15,19 @@ public abstract class PKPlugin implements Plugin<Project> {
 
     private boolean isRelease = false;
     private String changelog = "";
-    private String version = "";
 
     private PKExtension cfg;
 
     public void apply(Project project) {
-        project.apply(objectConfigurationAction -> {
-            this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
+        this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
 
-            this.project = project;
+        this.project = project;
 
-            this.changelog = MiscUtil.getGitChangelog(project);
-            this.isRelease = MiscUtil.isRelease(this.changelog);
-            this.version = MiscUtil.getVersion(project, this.cfg.getModInfo());
+        this.changelog = MiscUtil.getGitChangelog(project);
+        this.isRelease = MiscUtil.isRelease(this.changelog);
+        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
-            this.project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
-        });
+        this.project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
     }
 
     private void pushWebhook(Task task) {
