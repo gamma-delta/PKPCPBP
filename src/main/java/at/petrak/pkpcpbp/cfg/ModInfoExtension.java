@@ -29,4 +29,13 @@ public class ModInfoExtension {
     public void modVersion(String modVersion) {
         this.modVersion = modVersion;
     }
+
+    @Override
+    public String toString() {
+        return "ModInfoExtension{" +
+            "modID='" + modID + '\'' +
+            ", mcVersion='" + mcVersion + '\'' +
+            ", modVersion='" + modVersion + '\'' +
+            '}';
+    }
 }
