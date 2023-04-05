@@ -80,7 +80,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.getTasks().withType(Jar.class).configureEach(jar -> {
             jar.getArchiveVersion().set(project.getVersion().toString());
             jar.manifest(mani -> {
-                project.getLogger().warn(mani.toString());
+                project.getLogger().warn(mani.getAttributes().toString());
                 mani.attributes(Map.of(
                     "Specification-Title", cfg.getModInfo().getModID(),
                     "Specification-Vendor", "petra-kat",
