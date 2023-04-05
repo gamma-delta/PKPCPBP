@@ -80,6 +80,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.getTasks().withType(Jar.class).configureEach(jar -> {
             jar.getArchiveVersion().set(project.getVersion().toString());
             jar.manifest(mani -> {
+                project.getLogger().warn(mani.toString());
                 mani.attributes(Map.of(
                     "Specification-Title", cfg.getModInfo().getModID(),
                     "Specification-Vendor", "petra-kat",
@@ -92,7 +93,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
                         .atOffset(ZoneOffset.UTC)
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
                     "Timestampe", System.currentTimeMillis(),
-                    "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"),
+                    "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm" +
+                        ".vendor"),
                     "Build-On-Minecraft", cfg.getModInfo().getMcVersion()
                 ));
             });
