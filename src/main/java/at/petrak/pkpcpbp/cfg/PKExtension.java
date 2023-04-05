@@ -1,10 +1,12 @@
 package at.petrak.pkpcpbp.cfg;
 
-public class PKExtension {
-    private ModInfoExtension modInfo = new ModInfoExtension();
+import org.gradle.api.Action;
 
-    public void modInfo(ModInfoExtension modInfo) {
-        this.modInfo = modInfo;
+public class PKExtension {
+    private final ModInfoExtension modInfo = new ModInfoExtension();
+
+    public void modInfo(Action<? super ModInfoExtension> cfg) {
+        cfg.execute(this.modInfo);
     }
 
     public ModInfoExtension getModInfo() {

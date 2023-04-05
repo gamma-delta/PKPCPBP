@@ -1,7 +1,9 @@
 package at.petrak.pkpcpbp.cfg;
 
+import org.gradle.api.Action;
+
 public class SubprojExtension {
-    private ModInfoExtension modInfo = new ModInfoExtension();
+    private final ModInfoExtension modInfo = new ModInfoExtension();
 
     private String platform;
 
@@ -9,8 +11,8 @@ public class SubprojExtension {
         return modInfo;
     }
 
-    public void modInfo(ModInfoExtension modInfo) {
-        this.modInfo = modInfo;
+    public void modInfo(Action<? super ModInfoExtension> cfg) {
+        cfg.execute(this.modInfo);
     }
 
     public String getPlatform() {
