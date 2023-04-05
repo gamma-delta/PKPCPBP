@@ -29,9 +29,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
 
         project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
-        String version = MiscUtil.getVersion(project, cfg.getModInfo());
+        // String version = MiscUtil.getVersion(project, cfg.getModInfo());
+        String version = "0.6.9+ligma-balls";
         project.setVersion(version);
-        project.setProperty("archiveVersion", version);
         project.setProperty("archivesBaseName",
             "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
 
