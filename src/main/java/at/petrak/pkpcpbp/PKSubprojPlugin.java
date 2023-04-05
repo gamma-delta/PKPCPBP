@@ -33,8 +33,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
             project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
             // String version = MiscUtil.getVersion(project, cfg.getModInfo());
-            String version = "0.6.9+ligma-balls";
-            project.setVersion(version);
+            project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
             project.setProperty("archivesBaseName",
                 "%s-%s-%s".formatted(cfg.getModInfo().getModID(), cfg.getPlatform(), cfg.getModInfo().getMcVersion()));
 
@@ -82,21 +81,24 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         // Setup jar
         project.getTasks().withType(Jar.class).configureEach(jar -> {
-            jar.manifest(mani -> mani.attributes(Map.of(
-                "Specification-Title", cfg.getModInfo().getModID(),
-                "Specification-Vendor", "petra-kat",
-                "Specification-Version", jar.getArchiveVersion().get(),
-                "Implementation-Title", project.getName(),
-                "Implementation-Version", jar.getArchiveVersion().get(),
-                "Implementation-Vendor", "petra-kat",
-                // i hate time
-                "Implementation-Timestamp", LocalDateTime.now()
-                    .atOffset(ZoneOffset.UTC)
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
-                "Timestampe", System.currentTimeMillis(),
-                "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"),
-                "Build-On-Minecraft", cfg.getModInfo().getMcVersion()
-            )));
+            jar.manifest(mani -> {
+                project.getLogger().info(mani.toString());
+                mani.attributes(Map.of(
+                    "Specification-Title", cfg.getModInfo().getModID(),
+                    "Specification-Vendor", "petra-kat",
+                    "Specification-Version", jar.getArchiveVersion().get(),
+                    "Implementation-Title", project.getName(),
+                    "Implementation-Version", jar.getArchiveVersion().get(),
+                    "Implementation-Vendor", "petra-kat",
+                    // i hate time
+                    "Implementation-Timestamp", LocalDateTime.now()
+                        .atOffset(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
+                    "Timestampe", System.currentTimeMillis(),
+                    "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"),
+                    "Build-On-Minecraft", cfg.getModInfo().getMcVersion()
+                ));
+            });
         });
     }
 
