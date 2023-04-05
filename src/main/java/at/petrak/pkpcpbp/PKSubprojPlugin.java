@@ -18,9 +18,9 @@ import org.gradle.language.jvm.tasks.ProcessResources;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 // https://github.com/jaredlll08/Controlling/blob/10c04497a6bc182ba2788f84ffbbac21da8390bc/buildSrc/src/main/kotlin/com/blamejared/controlling/gradle/DefaultPlugin.kt#L71
 public class PKSubprojPlugin implements Plugin<Project> {
@@ -80,23 +80,25 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.getTasks().withType(Jar.class).configureEach(jar -> {
             jar.getArchiveVersion().set(project.getVersion().toString());
             jar.manifest(mani -> {
-                project.getLogger().warn(mani.getAttributes().toString());
-                mani.attributes(Map.of(
-                    "Specification-Title", cfg.getModInfo().getModID(),
-                    "Specification-Vendor", "petra-kat",
-                    "Specification-Version", jar.getArchiveVersion().get(),
-                    "Implementation-Title", project.getName(),
-                    "Implementation-Version", jar.getArchiveVersion().get(),
-                    "Implementation-Vendor", "petra-kat",
-                    // i hate time
-                    "Implementation-Timestamp", LocalDateTime.now()
+                // not Map.of to catch NPE on the right line
+                var attrs = new HashMap<String, Object>();
+                attrs.put("Specification-Title", cfg.getModInfo().getModID());
+                attrs.put("Specification-Vendor", "petra-kat");
+                attrs.put("Specification-Version", jar.getArchiveVersion().get());
+                attrs.put("Implementation-Title", project.getName());
+                attrs.put("Implementation-Version", jar.getArchiveVersion().get());
+                attrs.put("Implementation-Vendor", "petra-kat");
+                // i hate time
+                attrs.put("Implementation-Timestamp",
+                    LocalDateTime.now()
                         .atOffset(ZoneOffset.UTC)
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
-                    "Timestampe", System.currentTimeMillis(),
-                    "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm" +
-                        ".vendor"),
-                    "Build-On-Minecraft", cfg.getModInfo().getMcVersion()
-                ));
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
+                attrs.put("Timestampe", System.currentTimeMillis());
+                attrs.put("Built-On-Java",
+                    System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
+                attrs.put("Build-On-Minecraft", cfg.getModInfo().getMcVersion());
+
+                mani.attributes(attrs);
             });
         });
     }
