@@ -16,6 +16,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -88,7 +89,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 "Implementation-Title", project.getName(),
                 "Implementation-Version", jar.getArchiveVersion().get(),
                 "Implementation-Vendor", "petra-kat",
+                // i hate time
                 "Implementation-Timestamp", LocalDateTime.now()
+                    .atOffset(ZoneOffset.UTC)
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)),
                 "Timestampe", System.currentTimeMillis(),
                 "Built-On-Java", System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"),
