@@ -19,12 +19,12 @@ public abstract class PKPlugin implements Plugin<Project> {
 
     public void apply(Project project) {
         this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
-        project.getLogger().warn(this.cfg.toString());
 
         project.afterEvaluate(this::applyReal);
     }
 
     private void applyReal(Project project) {
+        project.getLogger().warn(this.cfg.toString());
         project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
         this.changelog = MiscUtil.getGitChangelog(project);
