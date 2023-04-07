@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.io.FileWriter;
 import java.nio.file.Files;
+
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.BuildResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -22,19 +24,20 @@ class PKPCPBPPluginFunctionalTest {
     File projectDir;
 
     private File getBuildFile() {
-        return new File(projectDir, "build.gradle");
+        return new File(projectDir, "build.gradle.kts");
     }
 
     private File getSettingsFile() {
         return new File(projectDir, "settings.gradle");
     }
 
-    @Test void canRunTask() throws IOException {
+    @Test
+    void canRunTask() throws IOException {
         writeString(getSettingsFile(), "");
         writeString(getBuildFile(),
             "plugins {" +
-            "  id('pkpcpbp.greeting')" +
-            "}");
+                "  id('pkpcpbp.greeting')" +
+                "}");
 
         // Run the build
         GradleRunner runner = GradleRunner.create();
