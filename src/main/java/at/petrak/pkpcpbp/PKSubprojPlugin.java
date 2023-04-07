@@ -32,6 +32,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
     @Override
     public void apply(Project proj) {
         this.cfg = proj.getExtensions().create("pkSubproj", SubprojExtension.class);
+
+        this.configJava(proj);
         proj.afterEvaluate(this::setupReal);
     }
 
@@ -45,7 +47,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.setProperty("archivesBaseName",
             "%s-%s-%s".formatted(this.modInfo.getModID(), cfg.getPlatform(), this.modInfo.getMcVersion()));
 
-        this.configJava(project);
         this.configDependencies(project);
         this.configMaven(project);
 
