@@ -27,7 +27,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
     private SubprojExtension cfg;
 
     @Override
-    public void apply(Project project) {
+    public void apply(Project proj) {
+        proj.afterEvaluate(this::setupReal);
+    }
+
+    private void setupReal(Project project) {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
         project.getLogger().warn(this.cfg.toString());
 
