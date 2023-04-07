@@ -43,7 +43,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupReal(Project project) {
-        this.modInfo = project.getParent().getExtensions().getByType(PKExtension.class).getModInfo();
+        this.modInfo = project.getRootProject().getExtensions().getByType(PKExtension.class).getModInfo();
         project.getLogger().warn(this.modInfo.toString());
         project.getLogger().warn(this.cfg.toString());
 
