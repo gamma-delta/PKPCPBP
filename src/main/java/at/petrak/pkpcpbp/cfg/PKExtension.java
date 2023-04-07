@@ -12,4 +12,11 @@ public class PKExtension {
     public ModInfoExtension getModInfo() {
         return modInfo;
     }
+
+    @Override
+    public String toString() {
+        return "PKExtension{" +
+            "modInfo=" + modInfo +
+            '}';
+    }
 }
