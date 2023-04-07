@@ -1,6 +1,5 @@
 package at.petrak.pkpcpbp;
 
-import at.petrak.pkpcpbp.cfg.ModInfoExtension;
 import at.petrak.pkpcpbp.cfg.PKExtension;
 import at.petrak.pkpcpbp.cfg.SubprojExtension;
 import at.petrak.pkpcpbp.filters.FlatteningJson5Transmogrifier;
@@ -27,7 +26,7 @@ import java.util.Locale;
 // https://github.com/jaredlll08/Controlling/blob/10c04497a6bc182ba2788f84ffbbac21da8390bc/buildSrc/src/main/kotlin/com/blamejared/controlling/gradle/DefaultPlugin.kt#L71
 public class PKSubprojPlugin implements Plugin<Project> {
     private SubprojExtension cfg;
-    private ModInfoExtension modInfo;
+    private PKExtension rootCfg;
 
     @Override
     public void apply(Project project) {
@@ -43,14 +42,18 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupReal(Project project) {
-        this.modInfo = project.getRootProject().getExtensions().getByType(PKExtension.class).getModInfo();
-        project.getLogger().warn(this.modInfo.toString());
-        project.getLogger().warn(this.cfg.toString());
+        this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
+        var modInfo = this.rootCfg.getModInfo();
 
-        project.setGroup("at.petra-k." + this.modInfo.getModID());
-        project.setVersion(MiscUtil.getVersion(project, this.modInfo));
+        if (this.rootCfg.getSuperDebugInfo()) {
+            project.getLogger().warn(modInfo.toString());
+            project.getLogger().warn(this.cfg.toString());
+        }
+
+        project.setGroup("at.petra-k." + modInfo.getModID());
+        project.setVersion(MiscUtil.getVersion(project, modInfo));
         project.setProperty("archivesBaseName",
-            "%s-%s-%s".formatted(this.modInfo.getModID(), cfg.getPlatform(), this.modInfo.getMcVersion()));
+            "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
 
         this.configJava(project);
         this.configDependencies(project);
@@ -81,6 +84,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void configJava(Project project) {
+        var modInfo = this.rootCfg.getModInfo();
 
         project.getTasks().withType(JavaCompile.class).configureEach(it -> {
             it.getOptions().setEncoding("UTF-8");
@@ -93,7 +97,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
             jar.manifest(mani -> {
                 // not Map.of to catch NPE on the right line
                 var attrs = new HashMap<String, Object>();
-                attrs.put("Specification-Title", this.modInfo.getModID());
+                attrs.put("Specification-Title", modInfo.getModID());
                 attrs.put("Specification-Vendor", "petra-kat");
                 attrs.put("Specification-Version", jar.getArchiveVersion().get());
                 attrs.put("Implementation-Title", project.getName());
@@ -107,7 +111,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 attrs.put("Timestampe", System.currentTimeMillis());
                 attrs.put("Built-On-Java",
                     System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-                attrs.put("Build-On-Minecraft", this.modInfo.getMcVersion());
+                attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
+
+                if (this.rootCfg.getSuperDebugInfo()) {
+                    project.getLogger().warn("Jar manifest:");
+                    attrs.forEach((k, v) -> project.getLogger().warn("%s : %s".formatted(k, v)));
+                }
 
                 mani.attributes(attrs);
             });

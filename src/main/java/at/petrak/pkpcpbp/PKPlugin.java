@@ -24,7 +24,9 @@ public abstract class PKPlugin implements Plugin<Project> {
     }
 
     private void applyReal(Project project) {
-        project.getLogger().warn(this.cfg.toString());
+        if (this.cfg.getSuperDebugInfo()) {
+            project.getLogger().warn(this.cfg.toString());
+        }
         project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
         this.changelog = MiscUtil.getGitChangelog(project);
