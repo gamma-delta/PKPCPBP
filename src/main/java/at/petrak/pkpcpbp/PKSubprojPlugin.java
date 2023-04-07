@@ -32,7 +32,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
-
         {
             var java = project.getExtensions().getByType(JavaPluginExtension.class);
             java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(17));
@@ -82,6 +81,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void configJava(Project project) {
+
         project.getTasks().withType(JavaCompile.class).configureEach(it -> {
             it.getOptions().setEncoding("UTF-8");
             it.getOptions().getRelease().set(17);
