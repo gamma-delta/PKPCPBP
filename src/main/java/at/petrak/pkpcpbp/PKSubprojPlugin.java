@@ -28,11 +28,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project proj) {
+        this.cfg = proj.getExtensions().create("pkSubproj", SubprojExtension.class);
         proj.afterEvaluate(this::setupReal);
     }
 
     private void setupReal(Project project) {
-        this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
         project.getLogger().warn(this.cfg.toString());
 
         project.setGroup("at.petra-k." + cfg.getModInfo().getModID());
