@@ -37,6 +37,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     private void setupReal(Project project) {
         this.modInfo = project.getParent().getExtensions().getByType(PKExtension.class).getModInfo();
+        project.getLogger().warn(this.modInfo.toString());
         project.getLogger().warn(this.cfg.toString());
 
         project.setGroup("at.petra-k." + this.modInfo.getModID());
@@ -75,7 +76,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     private void configJava(Project project) {
         {
             var java = project.getExtensions().getByType(JavaPluginExtension.class);
-            java.toolchain(it -> it.getLanguageVersion().set(JavaLanguageVersion.of(17)));
+            java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(17));
             java.withSourcesJar();
             java.withJavadocJar();
         }
