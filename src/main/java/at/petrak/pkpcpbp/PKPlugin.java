@@ -12,8 +12,6 @@ import org.gradle.api.Task;
 
 public abstract class PKPlugin implements Plugin<Project> {
 
-    private Project project = null;
-
     private boolean isRelease = false;
     private String changelog = "";
 
@@ -23,14 +21,17 @@ public abstract class PKPlugin implements Plugin<Project> {
         this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
         project.getLogger().warn(this.cfg.toString());
 
-        this.project = project;
-        this.project.setVersion(MiscUtil.getVersion(this.project, this.cfg.getModInfo()));
+        project.afterEvaluate(this::applyReal);
+    }
+
+    private void applyReal(Project project) {
+        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
         this.changelog = MiscUtil.getGitChangelog(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
 //        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
-        this.project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
+        project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
     }
 
     private void pushWebhook(Task task) {
@@ -53,7 +54,7 @@ public abstract class PKPlugin implements Plugin<Project> {
                 ```"""
                 .formatted(this.cfg.getModInfo().getModID(),
                     System.getenv("BUILD_NUMBER"),
-                    this.project.getVersion(),
+                    task.getProject().getVersion(),
                     buildUrl,
                     this.changelog));
 
