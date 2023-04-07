@@ -30,13 +30,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
     private ModInfoExtension modInfo;
 
     @Override
-    public void apply(Project proj) {
-        proj.afterEvaluate(this::setupReal);
+    public void apply(Project project) {
+        this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
+        project.afterEvaluate(this::setupReal);
     }
 
     private void setupReal(Project project) {
-        this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
-
         this.modInfo = project.getParent().getExtensions().getByType(PKExtension.class).getModInfo();
         project.getLogger().warn(this.modInfo.toString());
         project.getLogger().warn(this.cfg.toString());
