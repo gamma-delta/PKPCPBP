@@ -51,6 +51,6 @@ publishing {
     }
 
     repositories {
-        add(maven("file://" + System.getenv("local_maven")))
+        maven("file:///" + System.getenv("local_maven"))
     }
 }
