@@ -31,13 +31,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project proj) {
-        this.cfg = proj.getExtensions().create("pkSubproj", SubprojExtension.class);
-
-        this.configJava(proj);
         proj.afterEvaluate(this::setupReal);
     }
 
     private void setupReal(Project project) {
+        this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
+
         this.modInfo = project.getParent().getExtensions().getByType(PKExtension.class).getModInfo();
         project.getLogger().warn(this.modInfo.toString());
         project.getLogger().warn(this.cfg.toString());
@@ -47,6 +46,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.setProperty("archivesBaseName",
             "%s-%s-%s".formatted(this.modInfo.getModID(), cfg.getPlatform(), this.modInfo.getMcVersion()));
 
+        this.configJava(project);
         this.configDependencies(project);
         this.configMaven(project);
 
