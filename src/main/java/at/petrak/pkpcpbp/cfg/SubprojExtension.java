@@ -1,19 +1,8 @@
 package at.petrak.pkpcpbp.cfg;
 
-import org.gradle.api.Action;
-
 public class SubprojExtension {
-    private final ModInfoExtension modInfo = new ModInfoExtension();
-
     private String platform;
 
-    public ModInfoExtension getModInfo() {
-        return modInfo;
-    }
-
-    public void modInfo(Action<? super ModInfoExtension> cfg) {
-        cfg.execute(this.modInfo);
-    }
 
     public String getPlatform() {
         return platform;
@@ -26,8 +15,7 @@ public class SubprojExtension {
     @Override
     public String toString() {
         return "SubprojExtension{" +
-            "modInfo=" + modInfo +
-            ", platform='" + platform + '\'' +
+            "platform='" + platform + '\'' +
             '}';
     }
 }

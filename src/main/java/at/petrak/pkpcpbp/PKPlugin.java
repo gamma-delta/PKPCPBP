@@ -11,6 +11,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 public abstract class PKPlugin implements Plugin<Project> {
+
     private Project project = null;
 
     private boolean isRelease = false;
