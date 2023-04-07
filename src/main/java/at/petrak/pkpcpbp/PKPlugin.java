@@ -21,8 +21,10 @@ public abstract class PKPlugin implements Plugin<Project> {
 
     public void apply(Project project) {
         this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
+        project.getLogger().warn(this.cfg.toString());
 
         this.project = project;
+        this.project.setVersion(MiscUtil.getVersion(this.project, this.cfg.getModInfo()));
 
         this.changelog = MiscUtil.getGitChangelog(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
@@ -44,14 +46,14 @@ public abstract class PKPlugin implements Plugin<Project> {
             var message = new Message();
             message.setUsername("Patreon Early Access");
             message.setContent("""
-                New **%s** prerelease -- build #%s for %s!
+                New `%s` prerelease -- build #%s for %s!
                 Download it here: %s
                 Changelog: ```
                 %s
                 ```"""
-                .formatted(this.project.property("modName"),
+                .formatted(this.cfg.getModInfo().getModID(),
                     System.getenv("BUILD_NUMBER"),
-                    this.project.property("minecraftVersion"),
+                    this.project.getVersion(),
                     buildUrl,
                     this.changelog));
 
