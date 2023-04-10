@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/CurseforgeInfoExtension.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModrinthInfoExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="17933" />
+    <option name="totalTimeSeconds" value="22547" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -87,6 +93,7 @@
       <recent name="$PROJECT_DIR$/plugin/src/main/java/at/petrak" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="at.petrak.pkpcpbp.cfg" />
       <recent name="at.petrak.pkpcpbp" />
       <recent name="at.petrak.pkpcpbp.filters" />
     </key>

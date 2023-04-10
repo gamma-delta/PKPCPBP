@@ -4,8 +4,10 @@ import at.petrak.pkpcpbp.cfg.PKExtension;
 import at.petrak.pkpcpbp.cfg.SubprojExtension;
 import at.petrak.pkpcpbp.filters.FlatteningJson5Transmogrifier;
 import at.petrak.pkpcpbp.filters.Json5Transmogrifier;
+import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.Task;
 import org.gradle.api.plugins.BasePluginExtension;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
@@ -16,6 +18,7 @@ import org.gradle.jvm.tasks.Jar;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -81,6 +84,14 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 file.filter(Json5Transmogrifier.class);
             });
         });
+
+        if (this.cfg.getPublish()) {
+            var changelog = MiscUtil.getGitChangelog(project.getRootProject());
+            if (MiscUtil.isRelease(changelog)) {
+                project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
+                    t -> this.setupCurseforge(t, changelog));
+            }
+        }
     }
 
     private void configJava(Project project) {
@@ -144,5 +155,32 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         publishing.repositories(it ->
             it.maven(maven -> maven.artifactUrls("file:///" + System.getenv("local_maven"))));
+    }
+
+    private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
+        var cf = rootCfg.getCfInfo();
+
+        task.apiToken = System.getProperty("curseforge_token");
+
+        var mainJar = getJarByName("jar", task);
+        var mainUpload = task.upload(cf.getId(), mainJar);
+
+        mainUpload.addGameVersion(rootCfg.getModInfo().getMcVersion());
+        // can't WAIT for me to forget about this when java 18 rolls around
+        mainUpload.addJavaVersion("Java 17");
+
+        mainUpload.releaseType = cf.getStability();
+
+        for (var dep : cf.getDependencies()) {
+            mainUpload.addRequirement(dep);
+        }
+        mainUpload.addModLoader(this.cfg.getPlatform());
+
+        mainUpload.changelog = changelog;
+        mainUpload.changelogType = net.darkhax.curseforgegradle.Constants.CHANGELOG_MARKDOWN;
+    }
+
+    private static File getJarByName(String name, Task task) {
+        return task.getProject().getTasks().named(name, Jar.class).get().getArchiveFile().get().getAsFile();
     }
 }

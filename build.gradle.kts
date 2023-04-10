@@ -5,6 +5,7 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     `kotlin-dsl`
+    id("net.darkhax.curseforgegradle") version "1.0.10"
 }
 
 group = "at.petra-k.pkpcpbp"
@@ -13,6 +14,7 @@ version = "%s-pre-%s".format(properties["pluginVersion"], System.getenv("BUILD_N
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -20,6 +22,9 @@ dependencies {
 
     implementation("blue.endless:jankson:1.2.2")
     implementation("com.diluv.schoomp:Schoomp:1.2.6")
+
+    implementation(group = "net.darkhax.curseforgegradle", name = "CurseForgeGradle", version = "1.0.10")
+    implementation(group = "com.modrinth.minotaur", name = "Minotaur", version = "2.+")
 }
 
 gradlePlugin {
