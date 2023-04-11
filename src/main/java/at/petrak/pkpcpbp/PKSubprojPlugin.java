@@ -59,7 +59,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
             "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
 
         this.configJava(project);
-        this.configDependencies(project);
         this.configMaven(project);
 
         // Disables Gradle's custom module metadata from being published to maven. The
@@ -87,7 +86,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         if (this.cfg.getPublish()) {
             var changelog = MiscUtil.getGitChangelog(project.getRootProject());
-            if (MiscUtil.isRelease(changelog)) {
+//            if (MiscUtil.isRelease(changelog)) {
+            // TODO: remove this post-testing
+            if (true) {
                 project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
                     t -> this.setupCurseforge(t, changelog));
             }
@@ -134,14 +135,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
     }
 
-    private void configDependencies(Project project) {
-        var implementation = project.getConfigurations().getByName("implementation");
-        var compileOnly = project.getConfigurations().getByName("compileOnly");
-        var annotationProcessor = project.getConfigurations().getByName("annotationProcessor");
-
-        implementation.getDependencies().add(project.getDependencies().create("org.jetbrains:annotations:24.0.1"));
-    }
-
     private void configMaven(Project project) {
         var publishing = project.getExtensions().getByType(PublishingExtension.class);
 
@@ -176,7 +169,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         }
         mainUpload.addModLoader(this.cfg.getPlatform());
 
-        mainUpload.changelog = changelog;
+        mainUpload.changelog = "# " + changelog;
         mainUpload.changelogType = net.darkhax.curseforgegradle.Constants.CHANGELOG_MARKDOWN;
     }
 
