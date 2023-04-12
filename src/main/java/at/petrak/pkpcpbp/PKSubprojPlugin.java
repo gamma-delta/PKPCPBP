@@ -154,9 +154,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
-        if (!MiscUtil.isRelease(changelog)) {
-            return;
-        }
+//        if (!MiscUtil.isRelease(changelog)) {
+//            return;
+//        }
         var cf = rootCfg.getCfInfo();
 
         task.apiToken = System.getProperty("curseforgeApiKey");
