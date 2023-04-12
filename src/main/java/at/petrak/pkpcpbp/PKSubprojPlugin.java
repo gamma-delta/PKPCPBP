@@ -86,12 +86,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         if (this.cfg.getPublish()) {
             var changelog = MiscUtil.getGitChangelog(project.getRootProject());
-//            if (MiscUtil.isRelease(changelog)) {
-            // TODO: remove this post-testing
-            if (true) {
-                project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
-                    t -> this.setupCurseforge(t, changelog));
-            }
+            project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
+                t -> this.setupCurseforge(t, changelog));
         }
     }
 
@@ -151,6 +147,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
+        if (!MiscUtil.isRelease(changelog)) {
+            return;
+        }
         var cf = rootCfg.getCfInfo();
 
         task.apiToken = System.getProperty("curseforge_token");
