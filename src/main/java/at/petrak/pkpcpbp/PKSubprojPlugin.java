@@ -159,7 +159,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         }
         var cf = rootCfg.getCfInfo();
 
-        task.apiToken = System.getProperty("curseforge_token");
+        task.apiToken = System.getProperty("curseforgeApiKey");
 
         var mainJar = getJarByName("jar", task);
         var mainUpload = task.upload(cf.getId(), mainJar);
