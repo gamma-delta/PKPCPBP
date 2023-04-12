@@ -19,6 +19,8 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -141,7 +143,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
 
         publishing.repositories(it -> it.maven(maven -> {
-            maven.artifactUrls("file:///" + System.getenv("local_maven"));
+            try {
+                maven.setUrl(new URL("file:///" + System.getenv("local_maven")));
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            }
         }));
     }
 
