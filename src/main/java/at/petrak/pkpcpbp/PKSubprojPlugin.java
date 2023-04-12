@@ -8,7 +8,6 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.plugins.BasePluginExtension;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
@@ -32,6 +31,8 @@ import java.util.Locale;
 public class PKSubprojPlugin implements Plugin<Project> {
     private SubprojExtension cfg;
     private PKExtension rootCfg;
+
+    private String archivesBaseName;
 
     @Override
     public void apply(Project project) {
@@ -57,8 +58,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         project.setGroup("at.petra-k." + modInfo.getModID());
         project.setVersion(MiscUtil.getVersion(project, modInfo));
+        // i "love" java
         project.setProperty("archivesBaseName",
-            "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
+            this.archivesBaseName = "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(),
+                modInfo.getMcVersion()));
 
         this.configJava(project);
         this.configMaven(project);
@@ -136,9 +139,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
     private void configMaven(Project project) {
         var publishing = project.getExtensions().getByType(PublishingExtension.class);
 
-        var base = project.getExtensions().getByType(BasePluginExtension.class);
         publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
-            pub.setArtifactId(base.getArchivesName().get());
+            pub.setArtifactId(this.archivesBaseName);
             pub.from(project.getComponents().getByName("java"));
         });
 
