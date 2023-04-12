@@ -134,16 +134,15 @@ public class PKSubprojPlugin implements Plugin<Project> {
     private void configMaven(Project project) {
         var publishing = project.getExtensions().getByType(PublishingExtension.class);
 
-        project.afterEvaluate(it -> {
-            var base = project.getExtensions().getByType(BasePluginExtension.class);
-            publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
-                pub.setArtifactId(base.getArchivesName().get());
-                pub.from(project.getComponents().getByName("java"));
-            });
+        var base = project.getExtensions().getByType(BasePluginExtension.class);
+        publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
+            pub.setArtifactId(base.getArchivesName().get());
+            pub.from(project.getComponents().getByName("java"));
         });
 
-        publishing.repositories(it ->
-            it.maven(maven -> maven.artifactUrls("file:///" + System.getenv("local_maven"))));
+        publishing.repositories(it -> it.maven(maven -> {
+            maven.artifactUrls("file:///" + System.getenv("local_maven"));
+        }));
     }
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
