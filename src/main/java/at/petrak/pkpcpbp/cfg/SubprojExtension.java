@@ -54,27 +54,29 @@ public class SubprojExtension {
     /**
      * The slugs of the dependencies
      */
-    public void curseforgeDependencies(Collection<String> deps) {
-        this.cfDeps.addAll(deps);
+    public void curseforgeDependencies(Collection<Object> deps) {
+        for (var it : deps) {
+            this.cfDeps.add(it.toString());
+        }
     }
 
-    public void curseforgeDependency(String dep) {
-        this.cfDeps.add(dep);
+    public void curseforgeDependency(Object dep) {
+        this.cfDeps.add(dep.toString());
     }
 
     public List<String> getCurseforgeDependencies() {
         return this.cfDeps;
     }
 
-    /**
-     * The slugs of the dependencies
-     */
-    public void modrinthDependencies(Collection<String> deps) {
-        this.modrinthDeps.addAll(deps);
+    public void modrinthDependencies(Collection<Object> deps) {
+        // oh fuck off groovy
+        for (var it : deps) {
+            this.modrinthDeps.add(it.toString());
+        }
     }
 
-    public void modrinthDependency(String dep) {
-        this.cfDeps.add(dep);
+    public void modrinthDependency(Object dep) {
+        this.cfDeps.add(dep.toString());
     }
 
     public List<String> getModrinthDependencies() {
