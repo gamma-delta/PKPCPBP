@@ -132,13 +132,14 @@ public class PKSubprojPlugin implements Plugin<Project> {
                     System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
                 attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
 
-                if (this.rootCfg.getSuperDebugInfo()) {
-                    project.getLogger().warn("Jar manifest:");
-                    attrs.forEach((k, v) -> project.getLogger().warn("%s : %s".formatted(k, v)));
-                }
-
                 mani.attributes(attrs);
             });
+
+            if (this.rootCfg.getSuperDebugInfo()) {
+                project.getLogger().warn("Jar manifest:");
+                jar.getManifest().getAttributes().forEach((k, v) ->
+                    project.getLogger().warn("%s : %s".formatted(k, v)));
+            }
         });
     }
 
