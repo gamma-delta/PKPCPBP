@@ -110,7 +110,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         // Setup jar
         project.getTasks().named("jar", Jar.class).configure(jar -> {
-            jar.getArchiveBaseName().set(this.archivesBaseName);
             jar.manifest(mani -> {
                 // not Map.of to catch NPE on the right line
                 var attrs = new HashMap<String, Object>();
