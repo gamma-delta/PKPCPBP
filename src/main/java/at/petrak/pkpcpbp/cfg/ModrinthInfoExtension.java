@@ -1,8 +1,18 @@
 package at.petrak.pkpcpbp.cfg;
 
 public class ModrinthInfoExtension {
+    String token;
+
     String id;
     String stability;
+
+    public void token(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
 
     public void id(String id) {
         this.id = id;

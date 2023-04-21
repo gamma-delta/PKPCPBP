@@ -5,7 +5,9 @@ plugins {
     id("java-gradle-plugin")
     id("maven-publish")
     `kotlin-dsl`
-    id("net.darkhax.curseforgegradle") version "1.0.10"
+
+//    id("net.darkhax.curseforgegradle") version "1.0.10"
+//    id("com.modrinth.minotaur") version "2.+"
 }
 
 group = "at.petra-k.pkpcpbp"

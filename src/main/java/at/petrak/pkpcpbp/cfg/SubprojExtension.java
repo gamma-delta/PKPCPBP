@@ -1,8 +1,20 @@
 package at.petrak.pkpcpbp.cfg;
 
+import org.gradle.jvm.tasks.Jar;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class SubprojExtension {
     private String platform;
     private Boolean publish = null;
+
+    private Jar cfJar;
+    private Jar modrinthJar;
+
+    private List<String> cfDeps = new ArrayList<>();
+    private List<String> modrinthDeps = new ArrayList<>();
 
 
     public String getPlatform() {
@@ -25,11 +37,61 @@ public class SubprojExtension {
         }
     }
 
+    public void curseforgeJar(Jar jar) {
+        this.cfJar = jar;
+    }
+
+    public Jar getCurseforgeJar() {
+        return this.cfJar;
+    }
+
+    public void modrinthJar(Jar jar) {
+        this.modrinthJar = jar;
+    }
+
+    public Jar getModrinthJar() {
+        return this.modrinthJar;
+    }
+
+    /**
+     * The slugs of the dependencies
+     */
+    public void curseforgeDependencies(Collection<String> deps) {
+        this.cfDeps.addAll(deps);
+    }
+
+    public void curseforgeDependency(String dep) {
+        this.cfDeps.add(dep);
+    }
+
+    public List<String> getCurseforgeDependencies() {
+        return this.cfDeps;
+    }
+
+    /**
+     * The slugs of the dependencies
+     */
+    public void modrinthDependencies(Collection<String> deps) {
+        this.modrinthDeps.addAll(deps);
+    }
+
+    public void modrinthDependency(String dep) {
+        this.cfDeps.add(dep);
+    }
+
+    public List<String> getModrinthDependencies() {
+        return this.modrinthDeps;
+    }
+
     @Override
     public String toString() {
         return "SubprojExtension{" +
             "platform='" + platform + '\'' +
             ", publish=" + publish +
+            ", cfJar=" + cfJar +
+            ", modrinthJar=" + modrinthJar +
+            ", cfDeps=" + cfDeps +
+            ", modrinthDeps=" + modrinthDeps +
             '}';
     }
 }

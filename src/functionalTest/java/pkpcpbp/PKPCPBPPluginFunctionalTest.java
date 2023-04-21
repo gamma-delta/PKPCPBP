@@ -28,7 +28,7 @@ class PKPCPBPPluginFunctionalTest {
     }
 
     private File getSettingsFile() {
-        return new File(projectDir, "settings.gradle");
+        return new File(projectDir, "settings.gradle.kts");
     }
 
     @Test

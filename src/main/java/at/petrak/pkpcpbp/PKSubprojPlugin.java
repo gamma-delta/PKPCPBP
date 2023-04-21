@@ -4,10 +4,14 @@ import at.petrak.pkpcpbp.cfg.PKExtension;
 import at.petrak.pkpcpbp.cfg.SubprojExtension;
 import at.petrak.pkpcpbp.filters.FlatteningJson5Transmogrifier;
 import at.petrak.pkpcpbp.filters.Json5Transmogrifier;
+import com.modrinth.minotaur.ModrinthExtension;
+import com.modrinth.minotaur.TaskModrinthUpload;
+import com.modrinth.minotaur.dependencies.Dependency;
+import com.modrinth.minotaur.dependencies.DependencyType;
+import com.modrinth.minotaur.dependencies.VersionDependency;
 import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
@@ -17,12 +21,12 @@ import org.gradle.jvm.tasks.Jar;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -154,23 +158,23 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
-//        if (!MiscUtil.isRelease(changelog)) {
-//            return;
-//        }
-        var cf = rootCfg.getCfInfo();
+        if (!MiscUtil.isRelease(changelog)) {
+            return;
+        }
+        var userCfg = rootCfg.getCfInfo();
 
-        task.apiToken = System.getenv("curseforgeApiKey");
+        task.apiToken = userCfg.getToken();
 
-        var mainJar = getJarByName("jar", task);
-        var mainUpload = task.upload(cf.getId(), mainJar);
+        var mainJar = this.cfg.getCurseforgeJar();
+        var mainUpload = task.upload(userCfg.getId(), mainJar);
 
         mainUpload.addGameVersion(rootCfg.getModInfo().getMcVersion());
         // can't WAIT for me to forget about this when java 18 rolls around
         mainUpload.addJavaVersion("Java 17");
 
-        mainUpload.releaseType = cf.getStability();
+        mainUpload.releaseType = userCfg.getStability();
 
-        for (var dep : cf.getDependencies()) {
+        for (var dep : this.cfg.getCurseforgeDependencies()) {
             mainUpload.addRequirement(dep);
         }
         mainUpload.addModLoader(this.cfg.getPlatform());
@@ -179,7 +183,29 @@ public class PKSubprojPlugin implements Plugin<Project> {
         mainUpload.changelogType = net.darkhax.curseforgegradle.Constants.CHANGELOG_MARKDOWN;
     }
 
-    private static File getJarByName(String name, Task task) {
-        return task.getProject().getTasks().named(name, Jar.class).get().getArchiveFile().get().getAsFile();
+    private void setupModrinth(TaskModrinthUpload task, String changelog) {
+//        if (!MiscUtil.isRelease(changelog)) {
+//            return;
+//        }
+        var userCfg = rootCfg.getModrinthInfo();
+        var modrinthExt = new ModrinthExtension(task.getProject());
+        modrinthExt.getToken().set(userCfg.getToken());
+        modrinthExt.getUploadFile().set(this.cfg.getModrinthJar());
+
+        var deps = new ArrayList<Dependency>();
+        for (var s : this.cfg.getModrinthDependencies()) {
+            var split = s.split(":");
+            var id = split[0];
+            var version = split[1];
+            var ty =
+                split.length == 2
+                    ? DependencyType.REQUIRED
+                    : DependencyType.valueOf(split[2]);
+            deps.add(new VersionDependency(id, version, ty));
+        }
+        modrinthExt.getDependencies().addAll(deps);
+        modrinthExt.getChangelog().set("# " + changelog);
+
+        task.getProject().getExtensions().add("minotaur", modrinthExt);
     }
 }

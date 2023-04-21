@@ -1,14 +1,18 @@
 package at.petrak.pkpcpbp.cfg;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 public class CurseforgeInfoExtension {
+    String token;
+
     int id;
     String stability;
 
-    List<String> dependencies = new ArrayList<>();
+    public void token(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
 
     public void id(int id) {
         this.id = id;
@@ -24,20 +28,5 @@ public class CurseforgeInfoExtension {
 
     public String getStability() {
         return this.stability;
-    }
-
-    /**
-     * The slugs of the dependencies
-     */
-    public void dependencies(Collection<String> deps) {
-        this.dependencies.addAll(deps);
-    }
-
-    public void dependency(String dep) {
-        this.dependencies.add(dep);
-    }
-
-    public List<String> getDependencies() {
-        return this.dependencies;
     }
 }
