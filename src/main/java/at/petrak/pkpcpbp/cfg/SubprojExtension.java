@@ -1,7 +1,5 @@
 package at.petrak.pkpcpbp.cfg;
 
-import org.gradle.jvm.tasks.Jar;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,8 +8,8 @@ public class SubprojExtension {
     private String platform;
     private Boolean publish = null;
 
-    private Jar cfJar;
-    private Jar modrinthJar;
+    private Object cfJar;
+    private Object modrinthJar;
 
     private List<String> cfDeps = new ArrayList<>();
     private List<String> modrinthDeps = new ArrayList<>();
@@ -37,19 +35,19 @@ public class SubprojExtension {
         }
     }
 
-    public void curseforgeJar(Jar jar) {
+    public void curseforgeJar(Object jar) {
         this.cfJar = jar;
     }
 
-    public Jar getCurseforgeJar() {
+    public Object getCurseforgeJar() {
         return this.cfJar;
     }
 
-    public void modrinthJar(Jar jar) {
+    public void modrinthJar(Object jar) {
         this.modrinthJar = jar;
     }
 
-    public Jar getModrinthJar() {
+    public Object getModrinthJar() {
         return this.modrinthJar;
     }
 

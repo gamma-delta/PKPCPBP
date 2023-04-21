@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/functionalTest/java/pkpcpbp/PKPCPBPPluginFunctionalTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/functionalTest/java/pkpcpbp/PKPCPBPPluginFunctionalTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/CurseforgeInfoExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/CurseforgeInfoExtension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModrinthInfoExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModrinthInfoExtension.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="26673" />
+    <option name="totalTimeSeconds" value="26828" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
