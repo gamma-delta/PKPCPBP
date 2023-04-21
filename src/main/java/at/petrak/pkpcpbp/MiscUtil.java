@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 
 public class MiscUtil {
     public static String getVersion(Project project, ModInfoExtension info) {
-        var changelog = getGitChangelog(project);
+        var changelog = getRawGitChangelogList(project);
 
         String version = info.getModVersion();
         if (!isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
@@ -20,7 +20,7 @@ public class MiscUtil {
         return version;
     }
 
-    public static String getGitChangelog(Project project) {
+    public static String getRawGitChangelogList(Project project) {
         var stdout = new ByteArrayOutputStream();
         var gitHash = System.getenv("GIT_COMMIT");
         var gitPrevHash = System.getenv("GIT_PREVIOUS_COMMIT");

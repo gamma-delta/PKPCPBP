@@ -29,7 +29,7 @@ public abstract class PKPlugin implements Plugin<Project> {
         }
         project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
-        this.changelog = MiscUtil.getGitChangelog(project);
+        this.changelog = MiscUtil.getRawGitChangelogList(project);
         this.isRelease = MiscUtil.isRelease(this.changelog);
 //        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 

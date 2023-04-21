@@ -92,7 +92,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
 
         if (this.cfg.getPublish()) {
-            var changelog = MiscUtil.getGitChangelog(project.getRootProject());
+            var changelog = MiscUtil.getRawGitChangelogList(project.getRootProject());
             project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
                 t -> this.setupCurseforge(t, changelog));
             project.getTasks().register("publishModrinth", TaskModrinthUpload.class,
@@ -110,7 +110,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         // Setup jar
         project.getTasks().named("jar", Jar.class).configure(jar -> {
-            jar.getArchiveVersion().set(this.archivesBaseName);
+            jar.getArchiveBaseName().set(this.archivesBaseName);
             jar.manifest(mani -> {
                 // not Map.of to catch NPE on the right line
                 var attrs = new HashMap<String, Object>();
