@@ -194,7 +194,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
         modrinthExt.getUploadFile().set(this.cfg.getModrinthJar());
         modrinthExt.getProjectId().set(userCfg.getId());
 
-        modrinthExt.getVersionNumber().set(this.archivesBaseName);
+        modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().getModVersion());
+        modrinthExt.getVersionName().set(this.archivesBaseName);
         modrinthExt.getVersionType().set(userCfg.getStability());
 
         var deps = new ArrayList<Dependency>();
