@@ -62,10 +62,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
         project.setGroup("at.petra-k." + modInfo.getModID());
         project.setVersion(MiscUtil.getVersion(project, modInfo));
-        // i "love" java
-        project.setProperty("archivesBaseName",
-            this.archivesBaseName = "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(),
-                modInfo.getMcVersion()));
+        this.archivesBaseName = "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion());
 
         this.configJava(project);
         this.configMaven(project);
@@ -111,8 +108,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
 
         // Setup jar
-        project.getTasks().withType(Jar.class).configureEach(jar -> {
+        project.getTasks().named("jar", Jar.class).configure(jar -> {
             jar.getArchiveVersion().set(project.getVersion().toString());
+            jar.getArchiveBaseName().set(this.archivesBaseName);
             jar.manifest(mani -> {
                 // not Map.of to catch NPE on the right line
                 var attrs = new HashMap<String, Object>();
@@ -136,9 +134,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
             });
 
             if (this.rootCfg.getSuperDebugInfo()) {
-                project.getLogger().warn("Jar manifest:");
+                project.getLogger().warn("Jar manifest for {}:", jar.getArchiveFileName().get());
                 jar.getManifest().getAttributes().forEach((k, v) ->
-                    project.getLogger().warn("%s : %s".formatted(k, v)));
+                    project.getLogger().warn("  {} : {}", k, v));
             }
         });
     }

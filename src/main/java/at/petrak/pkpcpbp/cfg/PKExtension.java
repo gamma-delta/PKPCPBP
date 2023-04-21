@@ -6,7 +6,7 @@ public class PKExtension {
     private final ModInfoExtension modInfo = new ModInfoExtension();
     private final CurseforgeInfoExtension cfInfo = new CurseforgeInfoExtension();
     private final ModrinthInfoExtension modrinthInfo = new ModrinthInfoExtension();
-    private boolean superDebugInfo;
+    private boolean superDebugInfo = false;
 
     public void modInfo(Action<? super ModInfoExtension> cfg) {
         cfg.execute(this.modInfo);
