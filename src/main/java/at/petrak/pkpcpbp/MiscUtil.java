@@ -43,6 +43,17 @@ public class MiscUtil {
         return stdout.toString();
     }
 
+    public static String getMostRecentPush(Project project) {
+        var stdout = new ByteArrayOutputStream();
+
+        project.exec(spec -> {
+            spec.commandLine("git", "log", "--pretty=tformat:%s", "HEAD~..HEAD");
+            spec.setStandardOutput(stdout);
+        });
+
+        return stdout.toString();
+    }
+
     public static boolean isRelease(String changelog) {
         return changelog.matches("(?i)^\\[release");
     }

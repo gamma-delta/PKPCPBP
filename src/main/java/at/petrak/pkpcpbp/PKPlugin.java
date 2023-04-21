@@ -56,7 +56,7 @@ public abstract class PKPlugin implements Plugin<Project> {
                 ```"""
                 .formatted(this.cfg.getModInfo().getModID(),
                     System.getenv("BUILD_NUMBER"),
-                    task.getProject().getVersion(),
+                    cfg.getModInfo().getMcVersion(),
                     buildUrl,
                     this.changelog));
 

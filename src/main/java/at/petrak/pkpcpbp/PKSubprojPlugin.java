@@ -92,7 +92,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
 
         if (this.cfg.getPublish()) {
-            var changelog = MiscUtil.getRawGitChangelogList(project.getRootProject());
+            var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
             project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
                 t -> this.setupCurseforge(t, changelog));
             project.getTasks().register("publishModrinth", TaskModrinthUpload.class,
