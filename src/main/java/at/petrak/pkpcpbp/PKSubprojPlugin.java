@@ -184,9 +184,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupModrinth(TaskModrinthUpload task, String changelog) {
-//        if (!MiscUtil.isRelease(changelog)) {
-//            return;
-//        }
+        if (!MiscUtil.isRelease(changelog)) {
+            return;
+        }
         var userCfg = rootCfg.getModrinthInfo();
         var modrinthExt = new ModrinthExtension(task.getProject());
 
