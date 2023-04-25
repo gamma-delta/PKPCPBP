@@ -98,10 +98,18 @@ public class PKSubprojPlugin implements Plugin<Project> {
             project.getPlugins().apply(Minotaur.class);
 
             var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
+            var isRelease = MiscUtil.isRelease(changelog);
+
             project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
-                t -> this.setupCurseforge(t, changelog));
+                    t -> this.setupCurseforge(t, changelog))
+                .configure(t -> {
+                    t.onlyIf($ -> isRelease);
+                });
             this.setupModrinth(project, changelog);
-            project.getTasks().register("publishModrinth", TaskModrinthUpload.class);
+
+            project.getTasks().register("publishModrinth", TaskModrinthUpload.class).configure(t -> {
+                t.onlyIf($ -> isRelease);
+            });
         }
     }
 
@@ -163,10 +171,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
-        if (!MiscUtil.isRelease(changelog)) {
-            task.getLogger().info("Skipping Curseforge release");
-            return;
-        }
         var userCfg = rootCfg.getCfInfo();
 
         task.apiToken = userCfg.getToken();
@@ -190,10 +194,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupModrinth(Project project, String changelog) {
-        if (!MiscUtil.isRelease(changelog)) {
-            project.getLogger().info("Skipping Modrinth release");
-            return;
-        }
         var modrinthExt = project.getExtensions().getByType(ModrinthExtension.class);
 
         var userCfg = rootCfg.getModrinthInfo();
