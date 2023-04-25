@@ -187,8 +187,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
         if (!MiscUtil.isRelease(changelog)) {
             return;
         }
+        var modrinthExt = task.getProject().getExtensions().getByType(ModrinthExtension.class);
+
         var userCfg = rootCfg.getModrinthInfo();
-        var modrinthExt = new ModrinthExtension(task.getProject());
 
         modrinthExt.getToken().set(userCfg.getToken());
         modrinthExt.getUploadFile().set(this.cfg.getModrinthJar());
@@ -211,7 +212,5 @@ public class PKSubprojPlugin implements Plugin<Project> {
         }
         modrinthExt.getDependencies().addAll(deps);
         modrinthExt.getChangelog().set("# " + changelog);
-
-        task.getProject().getExtensions().add("minotaur", modrinthExt);
     }
 }
