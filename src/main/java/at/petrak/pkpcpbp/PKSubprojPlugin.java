@@ -54,9 +54,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupReal(Project project) {
-        project.getPlugins().apply(CurseForgeGradlePlugin.class);
-        project.getPlugins().apply(Minotaur.class);
-
         this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
         var modInfo = this.rootCfg.getModInfo();
 
@@ -97,11 +94,14 @@ public class PKSubprojPlugin implements Plugin<Project> {
         });
 
         if (this.cfg.getPublish()) {
+            project.getPlugins().apply(CurseForgeGradlePlugin.class);
+            project.getPlugins().apply(Minotaur.class);
+
             var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
             project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
                 t -> this.setupCurseforge(t, changelog));
-            project.getTasks().register("publishModrinth", TaskModrinthUpload.class,
-                t -> this.setupModrinth(t, changelog));
+            this.setupModrinth(project, changelog);
+            project.getTasks().register("publishModrinth", TaskModrinthUpload.class);
         }
     }
 
@@ -189,12 +189,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
         mainUpload.changelogType = net.darkhax.curseforgegradle.Constants.CHANGELOG_MARKDOWN;
     }
 
-    private void setupModrinth(TaskModrinthUpload task, String changelog) {
+    private void setupModrinth(Project project, String changelog) {
         if (!MiscUtil.isRelease(changelog)) {
-            task.getLogger().info("Skipping Modrinth release");
+            project.getLogger().info("Skipping Modrinth release");
             return;
         }
-        var modrinthExt = task.getProject().getExtensions().getByType(ModrinthExtension.class);
+        var modrinthExt = project.getExtensions().getByType(ModrinthExtension.class);
 
         var userCfg = rootCfg.getModrinthInfo();
 
