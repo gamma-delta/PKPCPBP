@@ -159,6 +159,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
         if (!MiscUtil.isRelease(changelog)) {
+            task.getLogger().info("Skipping Curseforge release");
             return;
         }
         var userCfg = rootCfg.getCfInfo();
@@ -185,6 +186,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     private void setupModrinth(TaskModrinthUpload task, String changelog) {
         if (!MiscUtil.isRelease(changelog)) {
+            task.getLogger().info("Skipping Modrinth release");
             return;
         }
         var modrinthExt = task.getProject().getExtensions().getByType(ModrinthExtension.class);
