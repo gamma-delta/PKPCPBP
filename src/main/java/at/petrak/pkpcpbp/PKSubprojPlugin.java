@@ -4,11 +4,13 @@ import at.petrak.pkpcpbp.cfg.PKExtension;
 import at.petrak.pkpcpbp.cfg.SubprojExtension;
 import at.petrak.pkpcpbp.filters.FlatteningJson5Transmogrifier;
 import at.petrak.pkpcpbp.filters.Json5Transmogrifier;
+import com.modrinth.minotaur.Minotaur;
 import com.modrinth.minotaur.ModrinthExtension;
 import com.modrinth.minotaur.TaskModrinthUpload;
 import com.modrinth.minotaur.dependencies.Dependency;
 import com.modrinth.minotaur.dependencies.DependencyType;
 import com.modrinth.minotaur.dependencies.VersionDependency;
+import net.darkhax.curseforgegradle.CurseForgeGradlePlugin;
 import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -52,6 +54,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     private void setupReal(Project project) {
+        project.getPlugins().apply(CurseForgeGradlePlugin.class);
+        project.getPlugins().apply(Minotaur.class);
+
         this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
         var modInfo = this.rootCfg.getModInfo();
 
