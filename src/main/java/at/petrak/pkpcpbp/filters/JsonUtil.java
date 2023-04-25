@@ -73,6 +73,6 @@ public class JsonUtil {
             bob.append(buffer, 0, numChars);
         }
 
-        return bob.toString();
+        return bob.toString().replaceAll("\r\n", "\n");
     }
 }
