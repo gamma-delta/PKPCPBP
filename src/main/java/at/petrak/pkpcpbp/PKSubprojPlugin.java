@@ -162,7 +162,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
             pub.setArtifactId(this.archivesBaseName);
             pub.from(project.getComponents().getByName("java"));
             pub.getPom().withXml(xml -> {
-                var deps = xml.asNode().getAt(new QName("dependencies")).getAt("dependency");
+                var deps = xml.asNode().getAt(new QName("dependencies"));
+                if (rootCfg.getSuperDebugInfo()) {
+                    project.getLogger().warn("Trying to remove deps: {}", deps);
+                }
+
                 for (Object dep : deps) {
                     var gr = (GroovyObject) dep;
                     if (rootCfg.getSuperDebugInfo()) {
