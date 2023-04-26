@@ -172,7 +172,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 for (int i = 0; i < deps.getLength(); i++) {
                     var dep = deps.item(i);
                     if (rootCfg.getSuperDebugInfo()) {
-                        project.getLogger().warn("Removing dep {}", dep);
+                        project.getLogger().warn("Removing dep {}", dep.getTextContent());
                     }
                     dep.getParentNode().removeChild(dep);
                 }
