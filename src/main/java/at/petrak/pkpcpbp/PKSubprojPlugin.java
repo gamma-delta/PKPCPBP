@@ -10,8 +10,6 @@ import com.modrinth.minotaur.TaskModrinthUpload;
 import com.modrinth.minotaur.dependencies.Dependency;
 import com.modrinth.minotaur.dependencies.DependencyType;
 import com.modrinth.minotaur.dependencies.VersionDependency;
-import groovy.lang.GroovyObject;
-import groovy.namespace.QName;
 import net.darkhax.curseforgegradle.CurseForgeGradlePlugin;
 import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
@@ -162,19 +160,19 @@ public class PKSubprojPlugin implements Plugin<Project> {
             pub.setArtifactId(this.archivesBaseName);
             pub.from(project.getComponents().getByName("java"));
             pub.getPom().withXml(xml -> {
-                var deps = xml.asNode().getAt(new QName("dependencies"));
+                var depsContainer = xml.asElement().getElementsByTagName("dependencies").item(1);
+                var deps = depsContainer.getChildNodes();
+
                 if (rootCfg.getSuperDebugInfo()) {
-                    project.getLogger().warn("The xml: {}", xml);
                     project.getLogger().warn("Trying to remove deps: {}", deps);
                 }
 
-                for (Object dep : deps) {
-                    var gr = (GroovyObject) dep;
+                for (int i = 0; i < deps.getLength(); i++) {
+                    var dep = deps.item(i);
                     if (rootCfg.getSuperDebugInfo()) {
-                        project.getLogger().warn("Removing dep {}", gr);
+                        project.getLogger().warn("Removing dep {}", dep);
                     }
-                    var parent = (GroovyObject) gr.invokeMethod("parent", List.of());
-                    parent.invokeMethod("remove", List.of());
+                    dep.getParentNode().removeChild(dep);
                 }
             });
         });
