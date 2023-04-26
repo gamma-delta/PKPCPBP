@@ -65,7 +65,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         project.setGroup("at.petra-k." + modInfo.getModID());
         project.setVersion(MiscUtil.getVersion(project, modInfo));
         project.setProperty("archivesBaseName", this.archivesBaseName =
-            "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), project.getVersion()));
+            "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
 
         this.configJava(project);
         this.configMaven(project);
