@@ -164,6 +164,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
             pub.getPom().withXml(xml -> {
                 var deps = xml.asNode().getAt(new QName("dependencies"));
                 if (rootCfg.getSuperDebugInfo()) {
+                    project.getLogger().warn("The xml: {}", xml);
                     project.getLogger().warn("Trying to remove deps: {}", deps);
                 }
 
