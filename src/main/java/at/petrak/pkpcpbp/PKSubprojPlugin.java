@@ -159,11 +159,13 @@ public class PKSubprojPlugin implements Plugin<Project> {
         publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
             pub.setArtifactId(this.archivesBaseName);
             pub.from(project.getComponents().getByName("java"));
-            pub.getPom().withXml(xml -> {
-                var depsContainer = xml.asElement().getElementsByTagName("dependencies").item(1);
+            pub.getPom().withXml(xmlProvider -> {
+                var xml = xmlProvider.asElement();
+                var depsContainer = xml.getElementsByTagName("dependencies").item(0);
                 var deps = depsContainer.getChildNodes();
 
                 if (rootCfg.getSuperDebugInfo()) {
+                    project.getLogger().warn("The XML: {}", xml);
                     project.getLogger().warn("Trying to remove deps: {}", deps);
                 }
 
