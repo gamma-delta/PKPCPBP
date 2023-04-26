@@ -22,7 +22,11 @@ import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.jvm.tasks.Jar;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.gradle.language.jvm.tasks.ProcessResources;
+import org.w3c.dom.NodeList;
 
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -161,18 +165,17 @@ public class PKSubprojPlugin implements Plugin<Project> {
             pub.from(project.getComponents().getByName("java"));
             pub.getPom().withXml(xmlProvider -> {
                 var xml = xmlProvider.asElement();
-                var depsContainer = xml.getElementsByTagName("dependencies").item(0);
-                var deps = depsContainer.getChildNodes();
-
-                if (rootCfg.getSuperDebugInfo()) {
-                    project.getLogger().warn("The XML: {}", xml);
-                    project.getLogger().warn("Trying to remove deps: {}", deps);
+                NodeList found;
+                try {
+                    found = (NodeList) XPathFactory.newInstance().newXPath().evaluate("//dependencies/*", xml,
+                        XPathConstants.NODESET);
+                } catch (XPathExpressionException e) {
+                    throw new RuntimeException(e);
                 }
-
-                for (int i = 0; i < deps.getLength(); i++) {
-                    var dep = deps.item(i);
+                for (int i = 0; i < found.getLength(); i++) {
+                    var dep = found.item(i);
                     if (rootCfg.getSuperDebugInfo()) {
-                        project.getLogger().warn("Removing dep {}", dep.getTextContent());
+                        project.getLogger().warn("Removing dep: {}", dep);
                     }
                     dep.getParentNode().removeChild(dep);
                 }
