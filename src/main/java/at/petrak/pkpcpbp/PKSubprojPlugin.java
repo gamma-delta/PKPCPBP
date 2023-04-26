@@ -165,6 +165,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
                 var deps = xml.asNode().getAt(new QName("dependencies")).getAt("dependency");
                 for (Object dep : deps) {
                     var gr = (GroovyObject) dep;
+                    if (rootCfg.getSuperDebugInfo()) {
+                        project.getLogger().warn("Removing dep {}", gr);
+                    }
                     var parent = (GroovyObject) gr.invokeMethod("parent", List.of());
                     parent.invokeMethod("remove", List.of());
                 }
