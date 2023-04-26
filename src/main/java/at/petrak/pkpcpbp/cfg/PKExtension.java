@@ -39,6 +39,4 @@ public class PKExtension {
     public boolean getSuperDebugInfo() {
         return this.superDebugInfo;
     }
-
-
 }

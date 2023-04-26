@@ -10,6 +10,8 @@ import com.modrinth.minotaur.TaskModrinthUpload;
 import com.modrinth.minotaur.dependencies.Dependency;
 import com.modrinth.minotaur.dependencies.DependencyType;
 import com.modrinth.minotaur.dependencies.VersionDependency;
+import groovy.lang.GroovyObject;
+import groovy.namespace.QName;
 import net.darkhax.curseforgegradle.CurseForgeGradlePlugin;
 import net.darkhax.curseforgegradle.TaskPublishCurseForge;
 import org.gradle.api.Plugin;
@@ -159,6 +161,14 @@ public class PKSubprojPlugin implements Plugin<Project> {
         publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
             pub.setArtifactId(this.archivesBaseName);
             pub.from(project.getComponents().getByName("java"));
+            pub.getPom().withXml(xml -> {
+                var deps = xml.asNode().getAt(new QName("dependencies")).getAt("dependency");
+                for (Object dep : deps) {
+                    var gr = (GroovyObject) dep;
+                    var parent = (GroovyObject) gr.invokeMethod("parent", List.of());
+                    parent.invokeMethod("remove", List.of());
+                }
+            });
         });
 
         publishing.repositories(it -> it.maven(maven -> {
