@@ -179,6 +179,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
                     }
                     dep.getParentNode().removeChild(dep);
                 }
+                if (rootCfg.getSuperDebugInfo()) {
+                    project.getLogger().warn("Final XML: {}", xml);
+                }
             });
         });
 
