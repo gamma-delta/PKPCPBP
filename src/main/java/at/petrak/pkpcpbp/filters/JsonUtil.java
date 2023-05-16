@@ -33,15 +33,20 @@ public class JsonUtil {
     private static void flattenInner(String prefix, JsonObject obj, JsonObject out) {
         obj.forEach((keyStub, val) -> {
             String key;
-            if (prefix == null) {
+            if (prefix == null || prefix.isEmpty()) {
+                // Root
                 key = keyStub;
-            } else if (keyStub.isEmpty()
-                || ":_-/".indexOf(prefix.charAt(keyStub.length() - 1)) != -1) {
+            } else if (keyStub.isEmpty()) {
                 // Allow cases like: { foo: { "": 123, bar: 456 } }
                 // Flattens to { "foo": 123, "foo.bar": 456 }
-                // Or, cases like { "paucal:": { item1: "Item 1" } }
+                key = prefix;
+            } else if (":_-/".indexOf(prefix.charAt(prefix.length() - 1)) != -1) {
+                // Check if the prefix ends with specific things
+                // Allow { "paucal:": { item1: "Item 1" } }
+                // flattens to { "paucal:item1": "Item 1" }
                 key = prefix + keyStub;
             } else {
+                // Normal case
                 key = prefix + "." + keyStub;
             }
 
