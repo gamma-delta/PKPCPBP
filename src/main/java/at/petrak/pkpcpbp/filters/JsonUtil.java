@@ -36,7 +36,7 @@ public class JsonUtil {
             if (prefix == null) {
                 key = keyStub;
             } else if (keyStub.isEmpty()
-                || ":_-/".indexOf(keyStub.charAt(keyStub.length() - 1)) != -1) {
+                || ":_-/".indexOf(prefix.charAt(keyStub.length() - 1)) != -1) {
                 // Allow cases like: { foo: { "": 123, bar: 456 } }
                 // Flattens to { "foo": 123, "foo.bar": 456 }
                 // Or, cases like { "paucal:": { item1: "Item 1" } }
