@@ -40,7 +40,7 @@ public class JsonUtil {
                 // Allow cases like: { foo: { "": 123, bar: 456 } }
                 // Flattens to { "foo": 123, "foo.bar": 456 }
                 // Or, cases like { "paucal:": { item1: "Item 1" } }
-                key = prefix;
+                key = prefix + keyStub;
             } else {
                 key = prefix + "." + keyStub;
             }
