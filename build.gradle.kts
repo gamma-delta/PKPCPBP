@@ -27,6 +27,7 @@ dependencies {
 
     implementation(group = "net.darkhax.curseforgegradle", name = "CurseForgeGradle", version = "1.0.10")
     implementation(group = "com.modrinth.minotaur", name = "Minotaur", version = "2.+")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
 gradlePlugin {
@@ -59,5 +60,15 @@ publishing {
 
     repositories {
         maven("file:///" + System.getenv("local_maven"))
+    }
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+
+    maxHeapSize = "1G"
+
+    testLogging {
+        events("passed")
     }
 }
