@@ -3,7 +3,6 @@ package at.petrak.pkpcpbp.filters;
 import blue.endless.jankson.Jankson;
 import blue.endless.jankson.JsonGrammar;
 import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
 import blue.endless.jankson.api.SyntaxError;
 
 import java.io.IOException;
@@ -15,11 +14,11 @@ public class JsonUtil {
 
     public static StringReader processJson(Reader in, boolean flatten) throws IOException, SyntaxError {
         var jsonSrc = JsonUtil.jesusChristJustGetTheGodDamnReaderIntoAFuckingStream(in);
-        JsonObject asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n"));
+        JsonObject asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n").replaceAll("\\n\\s*", ""));
 
         JsonObject out = flatten
-            ? flattenObject(asJson)
-            : asJson;
+                ? flattenObject(asJson)
+                : asJson;
         var unTfedSrc = out.toJson(JsonGrammar.STRICT);
         return new StringReader(unTfedSrc);
     }
@@ -52,16 +51,6 @@ public class JsonUtil {
 
             if (val instanceof JsonObject subobj) {
                 flattenInner(key, subobj, out);
-            } else if (val instanceof JsonPrimitive prim
-                && prim.getValue() instanceof String text
-                && text.startsWith(">>>")) {
-                // In case i want to actually use the pipe char in the lang somewhere, require a start sigil
-                // also, I'm not sure *what* cypher's doing but I am NOT getting newlines in my input at all.
-                // so, we insert them ourselves
-                String validArea = text.substring(text.indexOf('|'));
-                String processed = validArea.replaceAll("\\|\\s*", "\n");
-                // This puts a newline out the front so remove that
-                out.put(key, new JsonPrimitive(processed.substring(1)));
             } else {
                 out.put(key, val);
             }
