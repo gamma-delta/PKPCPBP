@@ -14,11 +14,16 @@ public class JsonUtil {
 
     public static StringReader processJson(Reader in, boolean flatten) throws IOException, SyntaxError {
         var jsonSrc = JsonUtil.jesusChristJustGetTheGodDamnReaderIntoAFuckingStream(in);
-        JsonObject asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n").replaceAll("\\n\\s*", ""));
+        JsonObject asJson;
+        try {
+            asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n").replaceAll("\\n\\s*", ""));
+        } catch (SyntaxError exn) {
+            throw new RuntimeException(exn.getCompleteMessage(), exn);
+        }
 
         JsonObject out = flatten
-                ? flattenObject(asJson)
-                : asJson;
+            ? flattenObject(asJson)
+            : asJson;
         var unTfedSrc = out.toJson(JsonGrammar.STRICT);
         return new StringReader(unTfedSrc);
     }
