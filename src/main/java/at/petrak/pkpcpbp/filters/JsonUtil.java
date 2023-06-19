@@ -16,7 +16,7 @@ public class JsonUtil {
         var jsonSrc = JsonUtil.jesusChristJustGetTheGodDamnReaderIntoAFuckingStream(in);
         JsonObject asJson;
         try {
-            asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n").replaceAll("\\n\\s*", ""));
+            asJson = JANKSON.load(jsonSrc.replace("\r\n", "\n").replaceAll("\\\\n\\s*", "\\\\\n"));
         } catch (SyntaxError exn) {
             throw new RuntimeException(exn.getCompleteMessage(), exn);
         }
