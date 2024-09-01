@@ -24,7 +24,7 @@ dependencies {
     implementation("com.diluv.schoomp:Schoomp:1.2.6")
 
     implementation(group = "net.darkhax.curseforgegradle", name = "CurseForgeGradle", version = "1.0.10")
-    implementation(group = "com.modrinth.minotaur", name = "Minotaur", version = "2.+")
+    implementation(group = "com.modrinth.minotaur", name = "Minotaur", version = "2.8.7")
     implementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 

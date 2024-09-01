@@ -16,6 +16,8 @@ import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.publish.tasks.GenerateModuleMetadata;
+import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.jvm.tasks.Jar;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import org.w3c.dom.NodeList;
 
@@ -24,7 +26,12 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 // https://github.com/jaredlll08/Controlling/blob/10c04497a6bc182ba2788f84ffbbac21da8390bc/buildSrc/src/main/kotlin/com/blamejared/controlling/gradle/DefaultPlugin.kt#L71
 public class PKSubprojPlugin implements Plugin<Project> {
@@ -62,6 +69,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
           "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
     }
 
+    if (this.rootCfg.getSetupJarMetadata()) {
+      this.configJava(project);
+    }
     if (this.rootCfg.getSetupMavenMetadata()) {
       this.configMaven(project);
     }
@@ -85,6 +95,46 @@ public class PKSubprojPlugin implements Plugin<Project> {
         t.onlyIf($ -> isRelease);
       });
     }
+  }
+
+  private void configJava(Project project) {
+    var modInfo = this.rootCfg.getModInfo();
+
+    project.getTasks().withType(JavaCompile.class).configureEach(it -> {
+      it.getOptions().setEncoding("UTF-8");
+      it.getOptions().getRelease().set(21);
+    });
+
+    // Setup jar
+    project.getTasks().named("jar", Jar.class).configure(jar -> {
+      jar.manifest(mani -> {
+        // not Map.of to catch NPE on the right line
+        var attrs = new HashMap<String, Object>();
+        attrs.put("Specification-Title", modInfo.getModID());
+        attrs.put("Specification-Vendor", "petra-kat");
+        attrs.put("Specification-Version", jar.getArchiveVersion().get());
+        attrs.put("Implementation-Title", project.getName());
+        attrs.put("Implementation-Version", jar.getArchiveVersion().get());
+        attrs.put("Implementation-Vendor", "petra-kat");
+        // i hate time
+        attrs.put("Implementation-Timestamp",
+            LocalDateTime.now()
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
+        attrs.put("Timestampe", System.currentTimeMillis());
+        attrs.put("Built-On-Java",
+            System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
+        attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
+
+        mani.attributes(attrs);
+      });
+
+      if (this.rootCfg.getSuperDebugInfo()) {
+        project.getLogger().warn("Jar manifest for {}:", jar.getArchiveFileName().get());
+        jar.getManifest().getAttributes().forEach((k, v) ->
+            project.getLogger().warn("  {} : {}", k, v));
+      }
+    });
   }
 
   private void configMaven(Project project) {

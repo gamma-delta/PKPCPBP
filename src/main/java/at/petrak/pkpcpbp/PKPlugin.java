@@ -9,14 +9,6 @@ import com.diluv.schoomp.message.Message;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.tasks.compile.JavaCompile;
-import org.gradle.jvm.tasks.Jar;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Locale;
 
 public class PKPlugin implements Plugin<Project> {
   private boolean isRelease = false;
@@ -35,10 +27,6 @@ public class PKPlugin implements Plugin<Project> {
       project.getLogger().warn(this.cfg.toString());
     }
 
-    if (this.cfg.getSetupJarMetadata()) {
-      this.configJava(project);
-    }
-
     this.changelog = MiscUtil.getRawGitChangelogList(project);
     this.isRelease = MiscUtil.isRelease(this.changelog);
 //        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
@@ -46,45 +34,6 @@ public class PKPlugin implements Plugin<Project> {
     project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
   }
 
-  private void configJava(Project project) {
-    var modInfo = this.cfg.getModInfo();
-
-    project.getTasks().withType(JavaCompile.class).configureEach(it -> {
-      it.getOptions().setEncoding("UTF-8");
-      it.getOptions().getRelease().set(21);
-    });
-
-    // Setup jar
-    project.getTasks().named("jar", Jar.class).configure(jar -> {
-      jar.manifest(mani -> {
-        // not Map.of to catch NPE on the right line
-        var attrs = new HashMap<String, Object>();
-        attrs.put("Specification-Title", modInfo.getModID());
-        attrs.put("Specification-Vendor", "petra-kat");
-        attrs.put("Specification-Version", jar.getArchiveVersion().get());
-        attrs.put("Implementation-Title", project.getName());
-        attrs.put("Implementation-Version", jar.getArchiveVersion().get());
-        attrs.put("Implementation-Vendor", "petra-kat");
-        // i hate time
-        attrs.put("Implementation-Timestamp",
-            LocalDateTime.now()
-                .atOffset(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
-        attrs.put("Timestampe", System.currentTimeMillis());
-        attrs.put("Built-On-Java",
-            System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-        attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
-
-        mani.attributes(attrs);
-      });
-
-      if (this.cfg.getSuperDebugInfo()) {
-        project.getLogger().warn("Jar manifest for {}:", jar.getArchiveFileName().get());
-        jar.getManifest().getAttributes().forEach((k, v) ->
-            project.getLogger().warn("  {} : {}", k, v));
-      }
-    });
-  }
 
   private void pushWebhook(Task task) {
     try {

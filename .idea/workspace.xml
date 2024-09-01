@@ -5,20 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="do the \n removal earlier, replace with &quot;&quot; so there are no LF chars in patchouli, add testing library for stupid simple test.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKJson5Plugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +35,17 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="PKPCPBP" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="PKPCPBP" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="PKPCPBP" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -79,6 +80,9 @@
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "associatedIndex": 7
 }]]></component>
@@ -90,6 +94,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.PKPCPBP [publishMavenJavaPublicationToMavenRepository].executor": "Run",
+    "Gradle.PKPCPBP [publish].executor": "Run",
+    "Gradle.PKPCPBP [test].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -138,31 +145,7 @@
       <recent name="at.petrak.pkpcpbp.filters" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PKPCPBP [check]">
-    <configuration name="FlatteningJson5TransmogrifierTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;at.at.petrak.pkpcpbp.filters.FlatteningJson5TransmogrifierTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.PKPCPBP [publishMavenJavaPublicationToMavenRepository]">
     <configuration name="FlatteningJson5TransmogrifierTest.test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -209,7 +192,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="PKPCPBP [testClasses]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PKPCPBP [publishMavenJavaPublicationToMavenRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -220,7 +203,29 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="testClasses" />
+            <option value="publishMavenJavaPublicationToMavenRepository" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="PKPCPBP [publish]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="publish" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -255,11 +260,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.PKPCPBP [publishMavenJavaPublicationToMavenRepository]" />
+        <item itemvalue="Gradle.PKPCPBP [publish]" />
+        <item itemvalue="Gradle.PKPCPBP [test]" />
         <item itemvalue="Gradle.FlatteningJson5TransmogrifierTest.test" />
         <item itemvalue="Gradle.PKPCPBP [check]" />
-        <item itemvalue="Gradle.PKPCPBP [test]" />
-        <item itemvalue="Gradle.PKPCPBP [testClasses]" />
-        <item itemvalue="Gradle.FlatteningJson5TransmogrifierTest" />
       </list>
     </recent_temporary>
   </component>
