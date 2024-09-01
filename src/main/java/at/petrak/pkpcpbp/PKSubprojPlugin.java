@@ -80,13 +80,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
         .configure(t -> {
-          t.onlyIf($ -> isRelease && this.cfg.publish);
+          t.onlyIf($ -> isRelease && this.cfg.pkPublish);
         });
-    this.setupModrinth(project, changelog);
-
     project.getTasks().register("publishModrinth", TaskModrinthUpload.class).configure(t -> {
-      t.onlyIf($ -> isRelease && this.cfg.publish);
+      t.onlyIf($ -> isRelease && this.cfg.pkPublish);
     });
+    this.setupModrinth(project, changelog);
   }
 
   private void configJava(Project project) {

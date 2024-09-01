@@ -6,7 +6,8 @@ import java.util.List;
 
 public class SubprojExtension {
   public String platform;
-  public boolean publish = false;
+  // apparently `publish` has special meaning to groovy?
+  public boolean pkPublish = false;
 
   public Object curseforgeJar;
   public Object modrinthJar;
@@ -50,7 +51,7 @@ public class SubprojExtension {
   public String toString() {
     return "SubprojExtension{" +
         "platform='" + platform + '\'' +
-        ", publish=" + publish +
+        ", publish=" + pkPublish +
         ", cfJar=" + curseforgeJar +
         ", modrinthJar=" + modrinthJar +
         ", cfDeps=" + cfDeps +
