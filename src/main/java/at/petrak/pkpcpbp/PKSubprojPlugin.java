@@ -64,9 +64,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     if (this.rootCfg.getDoProjectMetadata()) {
       project.setGroup("at.petra-k." + modInfo.getModID());
-      project.setVersion(MiscUtil.getVersion(project, modInfo));
-      project.setProperty("archivesBaseName", this.archivesBaseName =
-          "%s-%s-%s".formatted(modInfo.getModID(), cfg.getPlatform(), modInfo.getMcVersion()));
+      String ver = MiscUtil.getVersion(project, modInfo);
+      project.setVersion(ver);
+      project.setProperty("archivesBaseName",
+          this.archivesBaseName = modInfo.getModID() + "-" + ver + "-" + this.cfg.getPlatform());
     }
 
     if (this.rootCfg.getSetupJarMetadata()) {
@@ -75,7 +76,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     if (this.rootCfg.getSetupMavenMetadata()) {
       this.configMaven(project);
     }
-
 
     if (this.cfg.getPublish()) {
       project.getPlugins().apply(CurseForgeGradlePlugin.class);
