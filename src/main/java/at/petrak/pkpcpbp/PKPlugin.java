@@ -11,7 +11,6 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 public class PKPlugin implements Plugin<Project> {
-  private boolean isRelease = false;
   private String changelog = "";
 
   private PKExtension cfg;
@@ -23,12 +22,11 @@ public class PKPlugin implements Plugin<Project> {
   }
 
   private void applyReal(Project project) {
-    if (this.cfg.getSuperDebugInfo()) {
+    if (this.cfg.superDebugInfo) {
       project.getLogger().warn(this.cfg.toString());
     }
 
     this.changelog = MiscUtil.getRawGitChangelogList(project);
-    this.isRelease = MiscUtil.isRelease(this.changelog);
 //        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
     project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));

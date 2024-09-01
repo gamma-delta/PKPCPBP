@@ -43,12 +43,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
   @Override
   public void apply(Project project) {
     this.cfg = project.getExtensions().create("pkSubproj", SubprojExtension.class);
-    {
-      var java = project.getExtensions().getByType(JavaPluginExtension.class);
-      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(21));
-      java.withSourcesJar();
-      java.withJavadocJar();
-    }
 
     project.afterEvaluate(this::setupReal);
   }
@@ -57,12 +51,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
     this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
     var modInfo = this.rootCfg.getModInfo();
 
-    if (this.rootCfg.getSuperDebugInfo()) {
+    if (this.rootCfg.superDebugInfo) {
       project.getLogger().warn(modInfo.toString());
       project.getLogger().warn(this.cfg.toString());
     }
 
-    if (this.rootCfg.getDoProjectMetadata()) {
+    if (this.rootCfg.doProjectMetadata) {
       project.setGroup("at.petra-k." + modInfo.getModID());
       String ver = this.getFullVersionString(project);
       project.setVersion(ver);
@@ -70,10 +64,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
           this.archivesBaseName = modInfo.getModID());
     }
 
-    if (this.rootCfg.getSetupJarMetadata()) {
+    if (this.rootCfg.setupJarMetadata) {
       this.configJava(project);
     }
-    if (this.rootCfg.getSetupMavenMetadata()) {
+    if (this.rootCfg.setupMavenMetadata) {
       this.configMaven(project);
     }
 
@@ -86,21 +80,28 @@ public class PKSubprojPlugin implements Plugin<Project> {
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
         .configure(t -> {
-          t.onlyIf($ -> isRelease && this.cfg.getPublish());
+          t.onlyIf($ -> isRelease && this.cfg.publish);
         });
     this.setupModrinth(project, changelog);
 
     project.getTasks().register("publishModrinth", TaskModrinthUpload.class).configure(t -> {
-      t.onlyIf($ -> isRelease && this.cfg.getPublish());
+      t.onlyIf($ -> isRelease && this.cfg.publish);
     });
   }
 
   private void configJava(Project project) {
     var modInfo = this.rootCfg.getModInfo();
 
+    {
+      var java = project.getExtensions().getByType(JavaPluginExtension.class);
+      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(21));
+      java.withSourcesJar();
+      java.withJavadocJar();
+    }
+
     project.getTasks().withType(JavaCompile.class).configureEach(it -> {
       it.getOptions().setEncoding("UTF-8");
-      it.getOptions().getRelease().set(21);
+      it.getOptions().getRelease().set(this.rootCfg.javaVersion);
     });
 
     // Setup jar
@@ -127,7 +128,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         mani.attributes(attrs);
       });
 
-      if (this.rootCfg.getSuperDebugInfo()) {
+      if (this.rootCfg.superDebugInfo) {
         project.getLogger().warn("Jar manifest for {}:", jar.getArchiveFileName().get());
         jar.getManifest().getAttributes().forEach((k, v) ->
             project.getLogger().warn("  {} : {}", k, v));
@@ -159,12 +160,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
         }
         for (int i = 0; i < found.getLength(); i++) {
           var dep = found.item(i);
-          if (rootCfg.getSuperDebugInfo()) {
+          if (rootCfg.superDebugInfo) {
             project.getLogger().warn("Removing dep: {}", dep);
           }
           dep.getParentNode().removeChild(dep);
         }
-        if (rootCfg.getSuperDebugInfo()) {
+        if (rootCfg.superDebugInfo) {
           project.getLogger().warn("Final XML: {}", xml);
         }
       });
@@ -184,19 +185,18 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     task.apiToken = userCfg.getToken();
 
-    var mainJar = this.cfg.getCurseforgeJar();
+    var mainJar = this.cfg.curseforgeJar;
     var mainUpload = task.upload(userCfg.getId(), mainJar);
 
     mainUpload.addGameVersion(rootCfg.getModInfo().getMcVersion());
-    // can't WAIT for me to forget about this when java 18 rolls around
-    mainUpload.addJavaVersion("Java 17");
+    mainUpload.addJavaVersion("Java " + rootCfg.javaVersion);
 
     mainUpload.releaseType = userCfg.getStability();
 
     for (var dep : this.cfg.getCurseforgeDependencies()) {
       mainUpload.addRequirement(dep);
     }
-    mainUpload.addModLoader(this.cfg.getPlatform());
+    mainUpload.addModLoader(this.cfg.platform);
 
     mainUpload.changelog = "# " + changelog;
     mainUpload.changelogType = net.darkhax.curseforgegradle.Constants.CHANGELOG_MARKDOWN;
@@ -208,7 +208,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var userCfg = rootCfg.getModrinthInfo();
 
     modrinthExt.getToken().set(userCfg.getToken());
-    modrinthExt.getUploadFile().set(this.cfg.getModrinthJar());
+    modrinthExt.getUploadFile().set(this.cfg.modrinthJar);
     modrinthExt.getProjectId().set(userCfg.getId());
 
     modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().getModVersion());
@@ -239,7 +239,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
       version += "-pre-" + System.getenv("BUILD_NUMBER");
     }
     // semver babay
-    version += "+%s-%s".formatted(this.cfg.getPlatform(), info.getMcVersion());
+    version += "+%s-%s".formatted(this.cfg.platform, info.getMcVersion());
 
     if (System.getenv("TAG_NAME") != null) {
       version = System.getenv("TAG_NAME").substring(1);

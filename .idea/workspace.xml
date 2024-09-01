@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="9b3116e4-3fa0-43dc-bc65-57570039e5dc" name="Changes" comment="do the \n removal earlier, replace with &quot;&quot; so there are no LF chars in patchouli, add testing library for stupid simple test.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +140,7 @@
       <recent name="at.petrak.pkpcpbp.filters" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.PKPCPBP [publishMavenJavaPublicationToMavenRepository]">
+  <component name="RunManager" selected="Gradle.PKPCPBP [test]">
     <configuration name="FlatteningJson5TransmogrifierTest.test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -252,9 +255,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.PKPCPBP [test]" />
         <item itemvalue="Gradle.PKPCPBP [publishMavenJavaPublicationToMavenRepository]" />
         <item itemvalue="Gradle.PKPCPBP [publish]" />
-        <item itemvalue="Gradle.PKPCPBP [test]" />
         <item itemvalue="Gradle.FlatteningJson5TransmogrifierTest.test" />
         <item itemvalue="Gradle.PKPCPBP [check]" />
       </list>

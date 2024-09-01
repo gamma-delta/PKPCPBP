@@ -5,46 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class SubprojExtension {
-  private String platform;
-  private boolean publish = false;
+  public String platform;
+  public boolean publish = false;
 
-  private Object cfJar;
-  private Object modrinthJar;
+  public Object curseforgeJar;
+  public Object modrinthJar;
 
   private List<String> cfDeps = new ArrayList<>();
   private List<String> modrinthDeps = new ArrayList<>();
-
-  public String getPlatform() {
-    return platform;
-  }
-
-  public void platform(String platform) {
-    this.platform = platform;
-  }
-
-  public void publish(boolean publish) {
-    this.publish = publish;
-  }
-
-  public boolean getPublish() {
-    return this.publish;
-  }
-
-  public void curseforgeJar(Object jar) {
-    this.cfJar = jar;
-  }
-
-  public Object getCurseforgeJar() {
-    return this.cfJar;
-  }
-
-  public void modrinthJar(Object jar) {
-    this.modrinthJar = jar;
-  }
-
-  public Object getModrinthJar() {
-    return this.modrinthJar;
-  }
 
   /**
    * The slugs of the dependencies
@@ -83,7 +51,7 @@ public class SubprojExtension {
     return "SubprojExtension{" +
         "platform='" + platform + '\'' +
         ", publish=" + publish +
-        ", cfJar=" + cfJar +
+        ", cfJar=" + curseforgeJar +
         ", modrinthJar=" + modrinthJar +
         ", cfDeps=" + cfDeps +
         ", modrinthDeps=" + modrinthDeps +
