@@ -79,6 +79,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     if (rootCfg.superDebugInfo) {
       project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
+      project.getLogger().warn(changelog);
     }
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
