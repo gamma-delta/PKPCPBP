@@ -64,10 +64,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     if (this.rootCfg.getDoProjectMetadata()) {
       project.setGroup("at.petra-k." + modInfo.getModID());
-      String ver = MiscUtil.getVersion(project, modInfo);
+      String ver = this.getFullVersionString(project);
       project.setVersion(ver);
       project.setProperty("archivesBaseName",
-          this.archivesBaseName = modInfo.getModID() + "-" + ver + "-" + this.cfg.getPlatform());
+          this.archivesBaseName = modInfo.getModID() + "-" + ver);
     }
 
     if (this.rootCfg.getSetupJarMetadata()) {
@@ -230,5 +230,24 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
     modrinthExt.getDependencies().addAll(deps);
     modrinthExt.getChangelog().set("# " + changelog);
+  }
+
+  private String getFullVersionString(Project project) {
+    var changelog = MiscUtil.getRawGitChangelogList(project);
+    var info = this.rootCfg.getModInfo();
+
+    String version = info.getModVersion();
+    if (!MiscUtil.isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
+      version += "-pre-" + System.getenv("BUILD_NUMBER");
+    }
+    // semver babay
+    version += "+%s-%s".formatted(this.cfg.getPlatform(), info.getMcVersion());
+
+    if (System.getenv("TAG_NAME") != null) {
+      version = System.getenv("TAG_NAME").substring(1);
+      project.getLogger().info("Version overridden to tag version " + version);
+    }
+
+    return version;
   }
 }

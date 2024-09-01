@@ -1,27 +1,10 @@
 package at.petrak.pkpcpbp;
 
-import at.petrak.pkpcpbp.cfg.ModInfoExtension;
 import org.gradle.api.Project;
 
 import java.io.ByteArrayOutputStream;
 
 public class MiscUtil {
-  public static String getVersion(Project project, ModInfoExtension info) {
-    var changelog = getRawGitChangelogList(project);
-
-    String version = info.getModVersion();
-    if (!isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
-      version += "-pre-" + System.getenv("BUILD_NUMBER");
-    } else if (System.getenv("TAG_NAME") != null) {
-      version = System.getenv("TAG_NAME").substring(1);
-      project.getLogger().info("Version overridden to tag version " + version);
-    }
-    // semver babay
-    version += "+" + info.getMcVersion();
-
-    return version;
-  }
-
   public static String getRawGitChangelogList(Project project) {
     var stdout = new ByteArrayOutputStream();
     var gitHash = System.getenv("GIT_COMMIT");
