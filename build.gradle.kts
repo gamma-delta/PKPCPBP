@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.archivesName
-
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id("java-gradle-plugin")
@@ -34,15 +32,21 @@ gradlePlugin {
     // Define the plugin
     plugins {
         create("pkpcpbp") {
-            id = "at.petra-k.PKPlugin"
+            id = "at.petra-k.pkpcpbp.PKPlugin"
             displayName = "P.K.P.C.P.B.P."
             description = "Petra Kat's Pretty Cool Publishing Boilerplate Plugin"
             implementationClass = "at.petrak.pkpcpbp.PKPlugin"
         }
+        create("pkJson5") {
+            id = "at.petra-k.pkpcpbp.PKJson5Plugin"
+            displayName = "PK Json5"
+            description = "Flattens/transpiles json5 to json. You can just use this plugin by itself hopefully"
+            implementationClass = "at.petrak.pkpcpbp.PKJson5Plugin"
+        }
         create("pkpcpbpSubproj") {
-            id = "at.petra-k.PKSubprojPlugin"
+            id = "at.petra-k.pkpcpbp.PKSubprojPlugin"
             displayName = "PKPCPBP (Subprojs)"
-            description = "Subprojects PKPCPBP"
+            description = "Sets up PKPCPBP stuff for subprojects."
             implementationClass = "at.petrak.pkpcpbp.PKSubprojPlugin"
         }
     }
@@ -52,7 +56,7 @@ publishing {
     publications {
         create("mavenJava", MavenPublication::class.java) {
             groupId = project.group.toString()
-            artifactId = project.archivesName
+            artifactId = "pkpcpb"
             version = project.version.toString()
             from(components.getByName("java"))
         }

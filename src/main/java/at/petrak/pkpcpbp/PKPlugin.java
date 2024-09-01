@@ -9,60 +9,110 @@ import com.diluv.schoomp.message.Message;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.compile.JavaCompile;
+import org.gradle.jvm.tasks.Jar;
 
-public abstract class PKPlugin implements Plugin<Project> {
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Locale;
 
-    private boolean isRelease = false;
-    private String changelog = "";
+public class PKPlugin implements Plugin<Project> {
+  private boolean isRelease = false;
+  private String changelog = "";
 
-    private PKExtension cfg;
+  private PKExtension cfg;
 
-    public void apply(Project project) {
-        this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
+  public void apply(Project project) {
+    this.cfg = project.getExtensions().create("pkpcpbp", PKExtension.class);
 
-        project.afterEvaluate(this::applyReal);
+    project.afterEvaluate(this::applyReal);
+  }
+
+  private void applyReal(Project project) {
+    if (this.cfg.getSuperDebugInfo()) {
+      project.getLogger().warn(this.cfg.toString());
     }
 
-    private void applyReal(Project project) {
-        if (this.cfg.getSuperDebugInfo()) {
-            project.getLogger().warn(this.cfg.toString());
-        }
-        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
+    if (this.cfg.getSetupJarMetadata()) {
+      this.configJava(project);
+    }
 
-        this.changelog = MiscUtil.getRawGitChangelogList(project);
-        this.isRelease = MiscUtil.isRelease(this.changelog);
+    this.changelog = MiscUtil.getRawGitChangelogList(project);
+    this.isRelease = MiscUtil.isRelease(this.changelog);
 //        project.setVersion(MiscUtil.getVersion(project, this.cfg.getModInfo()));
 
-        project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
+    project.task("publishToDiscord", t -> t.doLast(this::pushWebhook));
+  }
+
+  private void configJava(Project project) {
+    var modInfo = this.cfg.getModInfo();
+
+    project.getTasks().withType(JavaCompile.class).configureEach(it -> {
+      it.getOptions().setEncoding("UTF-8");
+      it.getOptions().getRelease().set(21);
+    });
+
+    // Setup jar
+    project.getTasks().named("jar", Jar.class).configure(jar -> {
+      jar.manifest(mani -> {
+        // not Map.of to catch NPE on the right line
+        var attrs = new HashMap<String, Object>();
+        attrs.put("Specification-Title", modInfo.getModID());
+        attrs.put("Specification-Vendor", "petra-kat");
+        attrs.put("Specification-Version", jar.getArchiveVersion().get());
+        attrs.put("Implementation-Title", project.getName());
+        attrs.put("Implementation-Version", jar.getArchiveVersion().get());
+        attrs.put("Implementation-Vendor", "petra-kat");
+        // i hate time
+        attrs.put("Implementation-Timestamp",
+            LocalDateTime.now()
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
+        attrs.put("Timestampe", System.currentTimeMillis());
+        attrs.put("Built-On-Java",
+            System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
+        attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
+
+        mani.attributes(attrs);
+      });
+
+      if (this.cfg.getSuperDebugInfo()) {
+        project.getLogger().warn("Jar manifest for {}:", jar.getArchiveFileName().get());
+        jar.getManifest().getAttributes().forEach((k, v) ->
+            project.getLogger().warn("  {} : {}", k, v));
+      }
+    });
+  }
+
+  private void pushWebhook(Task task) {
+    try {
+      String discordWebhook = System.getenv("discordWebhook");
+      String buildUrl = System.getenv("BUILD_URL");
+      if (discordWebhook == null || buildUrl == null) {
+        task.getLogger().warn("Cannot send the webhook without the webhook url or the build url");
+        return;
+      }
+      var webhook = new Webhook(discordWebhook, "Petrak@ Patreon Gradle");
+
+      var message = new Message();
+      message.setUsername("Patreon Early Access");
+      message.setContent("""
+          New `%s` prerelease -- build #%s for %s!
+          Download it here: %s
+          Changelog: ```
+          %s
+          ```"""
+          .formatted(this.cfg.getModInfo().getModID(),
+              System.getenv("BUILD_NUMBER"),
+              cfg.getModInfo().getMcVersion(),
+              buildUrl,
+              this.changelog));
+
+      webhook.sendMessage(message);
+    } catch (Exception exn) {
+      task.getLogger().error("Failed to push Discord webhook.", exn);
     }
-
-    private void pushWebhook(Task task) {
-        try {
-            String discordWebhook = System.getenv("discordWebhook");
-            String buildUrl = System.getenv("BUILD_URL");
-            if (discordWebhook == null || buildUrl == null) {
-                task.getLogger().warn("Cannot send the webhook without the webhook url or the build url");
-                return;
-            }
-            var webhook = new Webhook(discordWebhook, "Petrak@ Patreon Gradle");
-
-            var message = new Message();
-            message.setUsername("Patreon Early Access");
-            message.setContent("""
-                New `%s` prerelease -- build #%s for %s!
-                Download it here: %s
-                Changelog: ```
-                %s
-                ```"""
-                .formatted(this.cfg.getModInfo().getModID(),
-                    System.getenv("BUILD_NUMBER"),
-                    cfg.getModInfo().getMcVersion(),
-                    buildUrl,
-                    this.changelog));
-
-            webhook.sendMessage(message);
-        } catch (Exception exn) {
-            task.getLogger().error("Failed to push Discord webhook.", exn);
-        }
-    }
+  }
 }
