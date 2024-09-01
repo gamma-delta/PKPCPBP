@@ -3,6 +3,7 @@ package at.petrak.pkpcpbp;
 import org.gradle.api.Project;
 
 import java.io.ByteArrayOutputStream;
+import java.util.regex.Pattern;
 
 public class MiscUtil {
   public static String getRawGitChangelogList(Project project) {
@@ -40,6 +41,7 @@ public class MiscUtil {
   }
 
   public static boolean isRelease(String changelog) {
-    return changelog.matches("(?i)^\\[release");
+    Pattern pat = Pattern.compile("^\\[release", Pattern.CASE_INSENSITIVE);
+    return pat.asPredicate().test(changelog);
   }
 }
