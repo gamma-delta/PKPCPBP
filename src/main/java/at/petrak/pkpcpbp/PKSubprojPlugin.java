@@ -77,24 +77,22 @@ public class PKSubprojPlugin implements Plugin<Project> {
       this.configMaven(project);
     }
 
-    if (this.cfg.getPublish()) {
-      project.getPlugins().apply(CurseForgeGradlePlugin.class);
-      project.getPlugins().apply(Minotaur.class);
+    project.getPlugins().apply(CurseForgeGradlePlugin.class);
+    project.getPlugins().apply(Minotaur.class);
 
-      var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
-      var isRelease = MiscUtil.isRelease(changelog);
+    var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
+    var isRelease = MiscUtil.isRelease(changelog);
 
-      project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
-              t -> this.setupCurseforge(t, changelog))
-          .configure(t -> {
-            t.onlyIf($ -> isRelease);
-          });
-      this.setupModrinth(project, changelog);
+    project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
+            t -> this.setupCurseforge(t, changelog))
+        .configure(t -> {
+          t.onlyIf($ -> isRelease && this.cfg.getPublish());
+        });
+    this.setupModrinth(project, changelog);
 
-      project.getTasks().register("publishModrinth", TaskModrinthUpload.class).configure(t -> {
-        t.onlyIf($ -> isRelease);
-      });
-    }
+    project.getTasks().register("publishModrinth", TaskModrinthUpload.class).configure(t -> {
+      t.onlyIf($ -> isRelease && this.cfg.getPublish());
+    });
   }
 
   private void configJava(Project project) {
