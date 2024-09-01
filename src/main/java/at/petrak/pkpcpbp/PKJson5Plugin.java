@@ -13,11 +13,7 @@ public class PKJson5Plugin implements Plugin<Project> {
 
   @Override
   public void apply(Project project) {
-    this.cfg = project.getExtensions().create("pkJson", Cfg.class);
-    project.afterEvaluate(this::setupReal);
-  }
-
-  private void setupReal(Project project) {
+    this.cfg = project.getExtensions().create("pkJson5", Cfg.class);
     project.getTasks().withType(ProcessResources.class).configureEach(it -> {
       if (this.cfg.autoProcessJson5Flattening) {
         it.filesMatching(List.of("assets/**/*.flatten.json5", "data/**/*.flatten.json5"), file -> {
@@ -33,7 +29,6 @@ public class PKJson5Plugin implements Plugin<Project> {
         });
       }
     });
-
   }
 
   public static class Cfg {
