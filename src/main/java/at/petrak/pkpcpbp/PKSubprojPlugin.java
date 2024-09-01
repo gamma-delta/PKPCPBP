@@ -67,7 +67,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
       String ver = this.getFullVersionString(project);
       project.setVersion(ver);
       project.setProperty("archivesBaseName",
-          this.archivesBaseName = modInfo.getModID() + "-" + ver);
+          this.archivesBaseName = modInfo.getModID());
     }
 
     if (this.rootCfg.getSetupJarMetadata()) {
