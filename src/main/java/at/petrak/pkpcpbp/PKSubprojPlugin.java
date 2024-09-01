@@ -77,6 +77,9 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
     var isRelease = MiscUtil.isRelease(changelog);
 
+    if (rootCfg.superDebugInfo) {
+      project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
+    }
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
         .configure(t -> {
