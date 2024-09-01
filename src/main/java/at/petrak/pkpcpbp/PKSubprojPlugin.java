@@ -57,11 +57,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     if (this.rootCfg.doProjectMetadata) {
-      project.setGroup("at.petra-k." + modInfo.getModID());
+      project.setGroup("at.petra-k." + modInfo.modID);
       String ver = this.getFullVersionString(project);
       project.setVersion(ver);
       project.setProperty("archivesBaseName",
-          this.archivesBaseName = modInfo.getModID());
+          this.archivesBaseName = modInfo.modID);
     }
 
     if (this.rootCfg.setupJarMetadata) {
@@ -109,7 +109,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
       jar.manifest(mani -> {
         // not Map.of to catch NPE on the right line
         var attrs = new HashMap<String, Object>();
-        attrs.put("Specification-Title", modInfo.getModID());
+        attrs.put("Specification-Title", modInfo.modID);
         attrs.put("Specification-Vendor", "petra-kat");
         attrs.put("Specification-Version", jar.getArchiveVersion().get());
         attrs.put("Implementation-Title", project.getName());
@@ -123,7 +123,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         attrs.put("Timestampe", System.currentTimeMillis());
         attrs.put("Built-On-Java",
             System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-        attrs.put("Build-On-Minecraft", modInfo.getMcVersion());
+        attrs.put("Build-On-Minecraft", modInfo.modVersion);
 
         mani.attributes(attrs);
       });
@@ -183,15 +183,15 @@ public class PKSubprojPlugin implements Plugin<Project> {
   private void setupCurseforge(TaskPublishCurseForge task, String changelog) {
     var userCfg = rootCfg.getCfInfo();
 
-    task.apiToken = userCfg.getToken();
+    task.apiToken = userCfg.token;
 
     var mainJar = this.cfg.curseforgeJar;
-    var mainUpload = task.upload(userCfg.getId(), mainJar);
+    var mainUpload = task.upload(userCfg.id, mainJar);
 
-    mainUpload.addGameVersion(rootCfg.getModInfo().getMcVersion());
+    mainUpload.addGameVersion(rootCfg.getModInfo().mcVersion);
     mainUpload.addJavaVersion("Java " + rootCfg.javaVersion);
 
-    mainUpload.releaseType = userCfg.getStability();
+    mainUpload.releaseType = userCfg.stability;
 
     for (var dep : this.cfg.getCurseforgeDependencies()) {
       mainUpload.addRequirement(dep);
@@ -207,13 +207,13 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     var userCfg = rootCfg.getModrinthInfo();
 
-    modrinthExt.getToken().set(userCfg.getToken());
+    modrinthExt.getToken().set(userCfg.token);
     modrinthExt.getUploadFile().set(this.cfg.modrinthJar);
-    modrinthExt.getProjectId().set(userCfg.getId());
+    modrinthExt.getProjectId().set(userCfg.id);
 
-    modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().getModVersion());
+    modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().modVersion);
     modrinthExt.getVersionName().set(this.archivesBaseName);
-    modrinthExt.getVersionType().set(userCfg.getStability());
+    modrinthExt.getVersionType().set(userCfg.stability);
 
     var deps = new ArrayList<Dependency>();
     for (var s : this.cfg.getModrinthDependencies()) {
@@ -234,12 +234,12 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var changelog = MiscUtil.getRawGitChangelogList(project);
     var info = this.rootCfg.getModInfo();
 
-    String version = info.getModVersion();
+    String version = info.modVersion;
     if (!MiscUtil.isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
       version += "-pre-" + System.getenv("BUILD_NUMBER");
     }
     // semver babay
-    version += "+%s-%s".formatted(this.cfg.platform, info.getMcVersion());
+    version += "+%s-%s".formatted(this.cfg.platform, info.mcVersion);
 
     if (System.getenv("TAG_NAME") != null) {
       version = System.getenv("TAG_NAME").substring(1);

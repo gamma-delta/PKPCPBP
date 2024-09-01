@@ -8,8 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/PKSubprojPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/PKExtension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/SubprojExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/CurseforgeInfoExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/CurseforgeInfoExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModInfoExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModInfoExtension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModrinthInfoExtension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/at/petrak/pkpcpbp/cfg/ModrinthInfoExtension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

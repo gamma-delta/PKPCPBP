@@ -51,9 +51,9 @@ public class PKPlugin implements Plugin<Project> {
           Changelog: ```
           %s
           ```"""
-          .formatted(this.cfg.getModInfo().getModID(),
+          .formatted(this.cfg.getModInfo().modID,
               System.getenv("BUILD_NUMBER"),
-              cfg.getModInfo().getMcVersion(),
+              cfg.getModInfo().mcVersion,
               buildUrl,
               this.changelog));
 
