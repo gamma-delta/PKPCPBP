@@ -57,7 +57,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     }
 
     if (this.rootCfg.doProjectMetadata) {
-      project.setGroup("at.petra-k." + modInfo.modID);
+      project.setGroup("at.petra-k");
       String ver = this.getFullVersionString(project);
       project.setVersion(ver);
       project.setProperty("archivesBaseName",
@@ -242,7 +242,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
       version += "-pre-" + System.getenv("BUILD_NUMBER");
     }
     // semver babay
-    version += "+%s-%s".formatted(this.cfg.platform, info.mcVersion);
+    version += "+%s-%s".formatted(info.mcVersion, this.cfg.platform);
 
     if (System.getenv("TAG_NAME") != null) {
       version = System.getenv("TAG_NAME").substring(1);
