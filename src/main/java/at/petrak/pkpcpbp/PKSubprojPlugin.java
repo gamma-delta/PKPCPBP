@@ -52,14 +52,20 @@ public class PKSubprojPlugin implements Plugin<Project> {
     this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
     var modInfo = this.rootCfg.getModInfo();
 
+    var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
+    var isRelease = MiscUtil.isRelease(changelog);
+
     if (this.rootCfg.superDebugInfo) {
       project.getLogger().warn(modInfo.toString());
       project.getLogger().warn(this.cfg.toString());
+
+      project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
+      project.getLogger().warn(changelog);
     }
 
     if (this.rootCfg.doProjectMetadata) {
       project.setGroup("at.petra-k");
-      this.fullVersion = this.getFullVersionString(project);
+      this.fullVersion = this.getFullVersionString(project, isRelease);
       project.setVersion(this.fullVersion);
       project.setProperty("archivesBaseName",
           this.archivesBaseName = modInfo.modID);
@@ -75,13 +81,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     project.getPlugins().apply(CurseForgeGradlePlugin.class);
     project.getPlugins().apply(Minotaur.class);
 
-    var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
-    var isRelease = MiscUtil.isRelease(changelog);
-
-    if (rootCfg.superDebugInfo) {
-      project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
-      project.getLogger().warn(changelog);
-    }
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
         .configure(t -> {
@@ -236,12 +235,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
     modrinthExt.getChangelog().set("# " + changelog);
   }
 
-  private String getFullVersionString(Project project) {
-    var changelog = MiscUtil.getRawGitChangelogList(project);
+  private String getFullVersionString(Project project, boolean isRelease) {
     var info = this.rootCfg.getModInfo();
 
     String version = info.modVersion;
-    if (!MiscUtil.isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
+    if (!isRelease && System.getenv("BUILD_NUMBER") != null) {
       version += "-pre-" + System.getenv("BUILD_NUMBER");
     }
     // semver babay
