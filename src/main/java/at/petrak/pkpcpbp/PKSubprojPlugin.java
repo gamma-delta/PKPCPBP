@@ -97,7 +97,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     {
       var java = project.getExtensions().getByType(JavaPluginExtension.class);
-      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(21));
+      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(this.rootCfg.javaVersion));
       java.withSourcesJar();
       java.withJavadocJar();
     }
