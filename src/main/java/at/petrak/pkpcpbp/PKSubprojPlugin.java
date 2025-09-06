@@ -38,7 +38,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
   private SubprojExtension cfg;
   private PKExtension rootCfg;
 
-  private String archivesBaseName;
+  public String archivesBaseName;
+  public String fullVersion;
 
   @Override
   public void apply(Project project) {
@@ -58,8 +59,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     if (this.rootCfg.doProjectMetadata) {
       project.setGroup("at.petra-k");
-      String ver = this.getFullVersionString(project);
-      project.setVersion(ver);
+      this.fullVersion = this.getFullVersionString(project);
+      project.setVersion(this.fullVersion);
       project.setProperty("archivesBaseName",
           this.archivesBaseName = modInfo.modID);
     }
@@ -191,6 +192,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var mainJar = this.cfg.curseforgeJar;
     var mainUpload = task.upload(userCfg.id, mainJar);
 
+    mainUpload.displayName = this.fullVersion;
+
     mainUpload.addGameVersion(rootCfg.getModInfo().mcVersion);
     mainUpload.addJavaVersion("Java " + rootCfg.javaVersion);
 
@@ -215,7 +218,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     modrinthExt.getProjectId().set(userCfg.id);
 
     modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().modVersion);
-    modrinthExt.getVersionName().set(this.archivesBaseName);
+    modrinthExt.getVersionName().set(this.fullVersion);
     modrinthExt.getVersionType().set(userCfg.stability);
 
     var deps = new ArrayList<Dependency>();
