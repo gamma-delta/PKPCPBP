@@ -38,8 +38,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
   private SubprojExtension cfg;
   private PKExtension rootCfg;
 
-  public String archivesBaseName;
-  public String fullVersion;
+  private String artifactId;
+  private String versionDisplayName;
 
   @Override
   public void apply(Project project) {
@@ -65,10 +65,13 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     if (this.rootCfg.doProjectMetadata) {
       project.setGroup("at.petra-k");
-      this.fullVersion = this.getFullVersionString(project, isRelease);
-      project.setVersion(this.fullVersion);
+      String ver = this.getFullVersionString(project, isRelease);
+      project.setVersion(this.versionDisplayName = ver);
       project.setProperty("archivesBaseName",
-          this.archivesBaseName = modInfo.modID);
+          this.artifactId = modInfo.modID);
+    } else {
+      this.artifactId = this.cfg.artifactId;
+      this.versionDisplayName = this.cfg.versionDisplayName;
     }
 
     if (this.rootCfg.setupJarMetadata) {
@@ -150,7 +153,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     });
 
     publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
-      pub.setArtifactId(this.archivesBaseName);
+      pub.setArtifactId(this.artifactId);
       pub.from(project.getComponents().getByName("java"));
       pub.getPom().withXml(xmlProvider -> {
         var xml = xmlProvider.asElement();
@@ -191,7 +194,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var mainJar = this.cfg.curseforgeJar;
     var mainUpload = task.upload(userCfg.id, mainJar);
 
-    mainUpload.displayName = this.fullVersion;
+    mainUpload.displayName = this.versionDisplayName;
 
     mainUpload.addGameVersion(rootCfg.getModInfo().mcVersion);
     mainUpload.addJavaVersion("Java " + rootCfg.javaVersion);
@@ -217,7 +220,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     modrinthExt.getProjectId().set(userCfg.id);
 
     modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().modVersion);
-    modrinthExt.getVersionName().set(this.fullVersion);
+    modrinthExt.getVersionName().set(this.versionDisplayName);
     modrinthExt.getVersionType().set(userCfg.stability);
 
     var deps = new ArrayList<Dependency>();
