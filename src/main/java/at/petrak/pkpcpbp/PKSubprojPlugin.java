@@ -123,10 +123,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
             LocalDateTime.now()
                 .atOffset(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
-        attrs.put("Timestampe", System.currentTimeMillis());
+        attrs.put("Timestamp", System.currentTimeMillis());
         attrs.put("Built-On-Java",
             System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-        attrs.put("Build-On-Minecraft", modInfo.modVersion);
+        attrs.put("Built-On-Minecraft", modInfo.modVersion);
 
         mani.attributes(attrs);
       });
