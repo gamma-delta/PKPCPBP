@@ -126,7 +126,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
         attrs.put("Timestamp", System.currentTimeMillis());
         attrs.put("Built-On-Java",
             System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-        attrs.put("Built-On-Minecraft", modInfo.modVersion);
+        attrs.put("Built-On-Minecraft", modInfo.mcVersion);
 
         mani.attributes(attrs);
       });
