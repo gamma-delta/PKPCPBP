@@ -9,6 +9,10 @@ public class SubprojExtension {
   // apparently `publish` has special meaning to groovy?
   public boolean pkPublish = false;
 
+  // only used if rootCfg.doProjectMetadata is false
+  public String artifactId;
+  public String versionDisplayName;
+
   public Object curseforgeJar;
   public Object modrinthJar;
 

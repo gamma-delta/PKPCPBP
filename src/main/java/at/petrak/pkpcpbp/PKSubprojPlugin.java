@@ -38,7 +38,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
   private SubprojExtension cfg;
   private PKExtension rootCfg;
 
-  private String archivesBaseName;
+  private String artifactId;
+  private String versionDisplayName;
 
   @Override
   public void apply(Project project) {
@@ -51,17 +52,26 @@ public class PKSubprojPlugin implements Plugin<Project> {
     this.rootCfg = project.getRootProject().getExtensions().getByType(PKExtension.class);
     var modInfo = this.rootCfg.getModInfo();
 
+    var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
+    var isRelease = MiscUtil.isRelease(changelog);
+
     if (this.rootCfg.superDebugInfo) {
       project.getLogger().warn(modInfo.toString());
       project.getLogger().warn(this.cfg.toString());
+
+      project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
+      project.getLogger().warn(changelog);
     }
 
     if (this.rootCfg.doProjectMetadata) {
       project.setGroup("at.petra-k");
-      String ver = this.getFullVersionString(project);
-      project.setVersion(ver);
+      String ver = this.getFullVersionString(project, isRelease);
+      project.setVersion(this.versionDisplayName = ver);
       project.setProperty("archivesBaseName",
-          this.archivesBaseName = modInfo.modID);
+          this.artifactId = modInfo.modID);
+    } else {
+      this.artifactId = this.cfg.artifactId;
+      this.versionDisplayName = this.cfg.versionDisplayName;
     }
 
     if (this.rootCfg.setupJarMetadata) {
@@ -74,13 +84,6 @@ public class PKSubprojPlugin implements Plugin<Project> {
     project.getPlugins().apply(CurseForgeGradlePlugin.class);
     project.getPlugins().apply(Minotaur.class);
 
-    var changelog = MiscUtil.getMostRecentPush(project.getRootProject());
-    var isRelease = MiscUtil.isRelease(changelog);
-
-    if (rootCfg.superDebugInfo) {
-      project.getLogger().warn("isRelease: " + isRelease + "; do publish: " + this.cfg.pkPublish);
-      project.getLogger().warn(changelog);
-    }
     project.getTasks().register("publishCurseForge", TaskPublishCurseForge.class,
             t -> this.setupCurseforge(t, changelog))
         .configure(t -> {
@@ -97,7 +100,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
 
     {
       var java = project.getExtensions().getByType(JavaPluginExtension.class);
-      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(21));
+      java.getToolchain().getLanguageVersion().set(JavaLanguageVersion.of(this.rootCfg.javaVersion));
       java.withSourcesJar();
       java.withJavadocJar();
     }
@@ -123,10 +126,10 @@ public class PKSubprojPlugin implements Plugin<Project> {
             LocalDateTime.now()
                 .atOffset(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)));
-        attrs.put("Timestampe", System.currentTimeMillis());
+        attrs.put("Timestamp", System.currentTimeMillis());
         attrs.put("Built-On-Java",
             System.getProperty("java.vm.version") + " " + System.getProperty("java.vm.vendor"));
-        attrs.put("Build-On-Minecraft", modInfo.modVersion);
+        attrs.put("Built-On-Minecraft", modInfo.mcVersion);
 
         mani.attributes(attrs);
       });
@@ -150,7 +153,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     });
 
     publishing.getPublications().register("mavenJava", MavenPublication.class, pub -> {
-      pub.setArtifactId(this.archivesBaseName);
+      pub.setArtifactId(this.artifactId);
       pub.from(project.getComponents().getByName("java"));
       pub.getPom().withXml(xmlProvider -> {
         var xml = xmlProvider.asElement();
@@ -191,6 +194,8 @@ public class PKSubprojPlugin implements Plugin<Project> {
     var mainJar = this.cfg.curseforgeJar;
     var mainUpload = task.upload(userCfg.id, mainJar);
 
+    mainUpload.displayName = this.versionDisplayName;
+
     mainUpload.addGameVersion(rootCfg.getModInfo().mcVersion);
     mainUpload.addJavaVersion("Java " + rootCfg.javaVersion);
 
@@ -215,7 +220,7 @@ public class PKSubprojPlugin implements Plugin<Project> {
     modrinthExt.getProjectId().set(userCfg.id);
 
     modrinthExt.getVersionNumber().set(this.rootCfg.getModInfo().modVersion);
-    modrinthExt.getVersionName().set(this.archivesBaseName);
+    modrinthExt.getVersionName().set(this.versionDisplayName);
     modrinthExt.getVersionType().set(userCfg.stability);
 
     var deps = new ArrayList<Dependency>();
@@ -233,12 +238,11 @@ public class PKSubprojPlugin implements Plugin<Project> {
     modrinthExt.getChangelog().set("# " + changelog);
   }
 
-  private String getFullVersionString(Project project) {
-    var changelog = MiscUtil.getRawGitChangelogList(project);
+  private String getFullVersionString(Project project, boolean isRelease) {
     var info = this.rootCfg.getModInfo();
 
     String version = info.modVersion;
-    if (!MiscUtil.isRelease(changelog) && System.getenv("BUILD_NUMBER") != null) {
+    if (!isRelease && System.getenv("BUILD_NUMBER") != null) {
       version += "-pre-" + System.getenv("BUILD_NUMBER");
     }
     // semver babay

@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
 public class MiscUtil {
+  /** Gets a list of commit messages since the previous commit built, prepending {@code - } to the start of each. */
   public static String getRawGitChangelogList(Project project) {
     var stdout = new ByteArrayOutputStream();
     var gitHash = System.getenv("GIT_COMMIT");
@@ -29,6 +30,7 @@ public class MiscUtil {
     return stdout.toString();
   }
 
+  /** Gets the most recent commit message as-is. */
   public static String getMostRecentPush(Project project) {
     var stdout = new ByteArrayOutputStream();
 
@@ -40,6 +42,10 @@ public class MiscUtil {
     return stdout.toString();
   }
 
+  /**
+   * Checks if the given commit messages starts with {@code [Release]} (case-insensitive).
+   * This should be used with {@link MiscUtil#getMostRecentPush}, <i>not</i> {@link MiscUtil#getRawGitChangelogList}.
+   */
   public static boolean isRelease(String changelog) {
     Pattern pat = Pattern.compile("^\\[release", Pattern.CASE_INSENSITIVE);
     return pat.asPredicate().test(changelog);
